@@ -31,3 +31,22 @@ export const GetBounds = () => {
 
   return null;
 };
+
+// export const GetBoundsOnLoad = () => {
+//   const { dispatch } = useContext(ListRestaurantsContext);
+
+//   // const map = useMap();
+//   const map = useMapEvent('load', async () => {
+//     const ne = map.getBounds().getNorthEast();
+//     const sw = map.getBounds().getSouthWest();
+
+//     console.log({ ne, sw });
+
+//     dispatch({
+//       type: actionTypes.SET_BOUNDS,
+//       payload: { ne, sw },
+//     });
+//   });
+
+//   return null;
+// };

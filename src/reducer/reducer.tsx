@@ -26,6 +26,7 @@ export enum actionTypes {
 }
 
 type PayloadType = {
+  [actionTypes.SET_IS_MAP_FIRST_LOAD]: boolean;
   [actionTypes.SET_COORDS]: CoordsType;
   [actionTypes.SET_BOUNDS]: BoundsType;
   [actionTypes.SET_LIST_RESTAURANTS]: [];

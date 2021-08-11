@@ -1,5 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useContext, useMemo } from 'react';
 import dynamic from 'next/dynamic';
+import router, { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 
 import axios from 'axios';
 import {
@@ -10,7 +12,9 @@ import {
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-// import { GetServerSideProps, GetStaticProps } from 'next';
+import { ListRestaurantsContext, actionTypes } from '../reducer/reducer';
+import { fetchRestaurantsByBoundary } from '../api/lib/travel_advisor';
+import { getPlaceDate } from '../api/lib/trevel_advisor2';
 
 import SEO from '../components/SEO';
 import ListRestaurants from '../components/ListRestaurants';
@@ -37,20 +41,34 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const Home: React.FC = () => {
+const Home: React.FC<any> = ({ dataListRestaurants }) => {
   const classes = useStyles();
 
-  // const [advice, setAdvice] = useState('');
+  const { state, dispatch } = useContext(ListRestaurantsContext);
+  // const { query } = useRouter();
 
-  // useEffect(() => {
-  //   const fetch = async (url: string) => {
-  //     const res = await fetcher(url);
-  //     setAdvice(res);
-  //     console.log(res);
-  //   };
+  useEffect(() => {
+    if (dataListRestaurants) {
+      dispatch({
+        type: actionTypes.SET_LIST_RESTAURANTS,
+        payload: dataListRestaurants,
+      });
+    }
+  }, [dataListRestaurants, dispatch]);
 
-  //   fetch(url);
-  // }, []);
+  useEffect(() => {
+    if (state.bounds.ne.lat && state.bounds.ne.lng) {
+      router.push({
+        pathname: '/',
+        query: {
+          neLat: state.bounds.ne.lat,
+          neLng: state.bounds.ne.lng,
+          swLat: state.bounds.sw.lat,
+          swLng: state.bounds.sw.lng,
+        },
+      });
+    }
+  }, [state.bounds]);
 
   const displayLoading = () => <CircularProgress />;
 
@@ -85,3 +103,19 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const { neLat, neLng, swLat, swLng } = query;
+
+  const dataListRestaurants =
+    neLat && neLng && swLat && swLng
+      ? await fetchRestaurantsByBoundary(
+          neLat as string,
+          neLng as string,
+          swLat as string,
+          swLng as string
+        )
+      : null;
+
+  return { props: { dataListRestaurants } };
+};

@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const ListRestaurants: React.FC = () => {
   const classes = useStyles();
-  const { state, dispatch } = useContext(ListRestaurantsContext);
+  const { state } = useContext(ListRestaurantsContext);
 
   console.log('ListRestaurants');
 
@@ -22,6 +22,7 @@ const ListRestaurants: React.FC = () => {
         List Restaurants
       </Typography>
       <Preview data={state.bounds} />
+      <Preview data={state.list_restaurants} />
     </div>
   );
 };
