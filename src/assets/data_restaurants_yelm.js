@@ -1,4 +1,4 @@
-[
+export const data_restaurants = [
   {
     location_id: '2066625',
     name: 'Pizzeria La Gitana',

@@ -12,12 +12,11 @@ import {
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListRestaurantsContext, actionTypes } from '../reducer/reducer';
+import { ListPlacesContext, actionTypes } from '../reducer/reducer';
 import { fetchRestaurantsByBoundary } from '../api/lib/travel_advisor';
-import { getPlaceDate } from '../api/lib/trevel_advisor2';
 
 import SEO from '../components/SEO';
-import ListRestaurants from '../components/ListRestaurants';
+import ListPlaces from '../components/ListPlaces/ListPlaces';
 import Footer from '../components/Footer';
 
 // const url = 'https://api.adviceslip.com/advice';
@@ -41,20 +40,20 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const Home: React.FC<any> = ({ dataListRestaurants }) => {
+const Home: React.FC<any | null> = ({ dataListPlaces }) => {
   const classes = useStyles();
 
-  const { state, dispatch } = useContext(ListRestaurantsContext);
+  const { state, dispatch } = useContext(ListPlacesContext);
   // const { query } = useRouter();
 
   useEffect(() => {
-    if (dataListRestaurants) {
+    if (dataListPlaces) {
       dispatch({
         type: actionTypes.SET_LIST_RESTAURANTS,
-        payload: dataListRestaurants,
+        payload: dataListPlaces,
       });
     }
-  }, [dataListRestaurants, dispatch]);
+  }, [dataListPlaces, dispatch]);
 
   useEffect(() => {
     if (state.bounds.ne.lat && state.bounds.ne.lng) {
@@ -74,7 +73,8 @@ const Home: React.FC<any> = ({ dataListRestaurants }) => {
 
   const Map: any = useMemo(
     () =>
-      dynamic(() => import('../components/MapLeaflet/MapLeaflet'), {
+      // dynamic(() => import('../components/MapReactLeaflet/Map'), {
+      dynamic(() => import('../components/MapLeaflet/Map'), {
         loading: () => displayLoading(),
         ssr: false,
       }),
@@ -89,10 +89,10 @@ const Home: React.FC<any> = ({ dataListRestaurants }) => {
           Restaurant Finder
         </Typography>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={4}>
-            <ListRestaurants />
+          <Grid item xs={12} sm={6} md={4}>
+            <ListPlaces />
           </Grid>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} sm={6} md={8}>
             <Map />
           </Grid>
         </Grid>
@@ -107,7 +107,7 @@ export default Home;
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { neLat, neLng, swLat, swLng } = query;
 
-  const dataListRestaurants =
+  const dataListPlaces =
     neLat && neLng && swLat && swLng
       ? await fetchRestaurantsByBoundary(
           neLat as string,
@@ -117,5 +117,5 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
         )
       : null;
 
-  return { props: { dataListRestaurants } };
+  return { props: { dataListPlaces } };
 };

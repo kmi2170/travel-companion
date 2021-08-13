@@ -6,15 +6,16 @@ import 'leaflet/dist/leaflet.css';
 // import { Typography } from '@material-ui/core';
 // import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListRestaurantsContext, actionTypes } from '../../reducer/reducer';
-import { GetBounds } from './MapLeafletHooks';
+import { ListPlacesContext, actionTypes } from '../../reducer/reducer';
+import { GetBounds } from './MapHooks';
+import ShowPopup from './ShowPopup';
 
 // const useStyles = makeStyles((theme: Theme) => ({}));
 
-const MapLeaflet: React.FC = () => {
+const Map: React.FC = () => {
   // const classes = useStyles();
 
-  const { dispatch } = useContext(ListRestaurantsContext);
+  const { dispatch } = useContext(ListPlacesContext);
   const mapRef = useRef(null);
 
   const handlewhenCreated = (mapInstance: any) => {
@@ -39,15 +40,19 @@ const MapLeaflet: React.FC = () => {
         zoom={9}
         scrollWheelZoom={false}
         whenCreated={(mapInstance) => handlewhenCreated(mapInstance)}
+        closePopupOnClick={false}
       >
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <GetBounds />
+        {/* 
+        <ShowPopup />
+        */}
       </MapContainer>
     </div>
   );
 };
 
-export default MapLeaflet;
+export default Map;

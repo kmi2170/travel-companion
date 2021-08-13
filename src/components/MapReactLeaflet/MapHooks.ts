@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { useMapEvent } from 'react-leaflet';
-import { ListRestaurantsContext, actionTypes } from '../../reducer/reducer';
+import { ListPlacesContext, actionTypes } from '../../reducer/reducer';
 
 let coords = [];
 
 export const GetBounds = () => {
-  const { dispatch } = useContext(ListRestaurantsContext);
+  const { dispatch } = useContext(ListPlacesContext);
 
   const map = useMapEvent('moveend', async () => {
     const ne = map.getBounds().getNorthEast();

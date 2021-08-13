@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListRestaurantsContext } from '../reducer/reducer';
+import { ListPlacesContext } from '../reducer/reducer';
 
 const useStyles = makeStyles((theme: Theme) => ({
   text: {},
@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Component: React.FC = () => {
   const classes = useStyles();
-  const { state, dispatch } = useContext(ListRestaurantsContext);
+  const { state, dispatch } = useContext(ListPlacesContext);
 
   return (
     <div>

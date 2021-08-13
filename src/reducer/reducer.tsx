@@ -4,13 +4,13 @@ import { CoordsType, BoundsType } from '../api/type_settings';
 const initialState = {
   coords: { lat: null, lng: null },
   bounds: { ne: { lat: null, lng: null }, sw: { lat: null, lng: null } },
-  list_restaurants: null,
+  list_places: null,
 };
 
 type StateType = {
   coords: CoordsType;
   bounds: BoundsType;
-  list_restaurants: [];
+  list_places: [];
 };
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -26,7 +26,6 @@ export enum actionTypes {
 }
 
 type PayloadType = {
-  [actionTypes.SET_IS_MAP_FIRST_LOAD]: boolean;
   [actionTypes.SET_COORDS]: CoordsType;
   [actionTypes.SET_BOUNDS]: BoundsType;
   [actionTypes.SET_LIST_RESTAURANTS]: [];
@@ -34,7 +33,7 @@ type PayloadType = {
 
 export type ActionsType = ActionMap<PayloadType>[keyof ActionMap<PayloadType>];
 
-export const ListRestaurantsContext = createContext<{
+export const ListPlacesContext = createContext<{
   state: StateType;
   dispatch: React.Dispatch<ActionsType>;
 }>({ state: initialState, dispatch: () => null });
@@ -46,15 +45,13 @@ export const reducer = (state: StateType, action: ActionsType) => {
     case actionTypes.SET_BOUNDS:
       return { ...state, bounds: action.payload };
     case actionTypes.SET_LIST_RESTAURANTS:
-      return { ...state, list_restaurants: action.payload };
+      return { ...state, list_places: action.payload };
     default:
       return state;
   }
 };
 
-const ListRestaurantsContextProvider: React.FC<React.ReactNode> = ({
-  children,
-}) => {
+const ListPlacesContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const contextValue = useMemo(() => {
@@ -62,10 +59,10 @@ const ListRestaurantsContextProvider: React.FC<React.ReactNode> = ({
   }, [state, dispatch]);
 
   return (
-    <ListRestaurantsContext.Provider value={contextValue}>
+    <ListPlacesContext.Provider value={contextValue}>
       {children}
-    </ListRestaurantsContext.Provider>
+    </ListPlacesContext.Provider>
   );
 };
 
-export default ListRestaurantsContextProvider;
+export default ListPlacesContextProvider;
