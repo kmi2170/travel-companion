@@ -31,6 +31,8 @@ export const getMapBoundsOnMoveend = async (
           payload: bounds[bounds.length - 1],
         });
         console.log(bounds[bounds.length - 1]);
+
+        bounds = [];
       }
     }, 5000)
   );

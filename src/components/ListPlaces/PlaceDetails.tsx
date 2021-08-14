@@ -55,9 +55,14 @@ const PlaceDetails: React.FC<any> = ({ place }) => {
             {place.name}
           </Typography>
           <Box display="flex" justifyContent="space-between">
-            <Rating name="read-only" value={+place.rating} readOnly />
+            <Rating
+              name="read-only"
+              value={+place.rating}
+              precision={0.5}
+              readOnly
+            />
             <Typography component="legend">
-              {place.num_reviews} review{place.num_reviews > 1 && 's'}
+              {place.num_reviews} review{+place.num_reviews > 1 && 's'}
             </Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
@@ -69,7 +74,7 @@ const PlaceDetails: React.FC<any> = ({ place }) => {
           <Box display="flex" justifyContent="space-between">
             <Typography variant="subtitle1">Ranking</Typography>
             <Typography variant="subtitle1" gutterBottom>
-              {place.rainking}
+              {place.ranking}
             </Typography>
           </Box>
           {place?.awards?.map((award, i) => (
