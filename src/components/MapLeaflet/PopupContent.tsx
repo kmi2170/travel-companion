@@ -43,7 +43,7 @@ const PopupContent: React.FC<PopupContentProos> = ({
         alt={name}
       />
       */}
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="subtitle2" gutterBottom>
         {name}
       </Typography>
       <Rating

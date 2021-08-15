@@ -24,8 +24,9 @@ const ListPlaces: React.FC = () => {
 
   return (
     <div>
-      <Typography variant="h5" className={classes.text}>
-        List of Places
+      <Typography variant="h6" className={classes.text}>
+        {state.list_places?.length} Result{state.list_places?.length > 1 && 's'}{' '}
+        Found
       </Typography>
       <Grid container spacing={2} className={classes.list}>
         {state.list_places?.map((place, i) => (

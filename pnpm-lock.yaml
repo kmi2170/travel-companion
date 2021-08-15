@@ -5,7 +5,7 @@ dependencies:
   axios: 0.21.1
   leaflet: 1.7.1
   leaflet-defaulticon-compatibility: 0.1.1
-  leaflet-geosearch: 3.3.2
+  leaflet-geosearch: 3.4.0
   next: 11.0.0_f31b35bdaa3b7c2fce82404f09d2dac4
   package.json: 2.0.1
   react: 17.0.2
@@ -2310,12 +2310,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-vDBFdlUAwjSEGep9ih8kfJilf6yN8V9zTbF5NC/1ZwLeGko3RUQepspPnGCRMFV51dY3Lb3hziboicrFz+rxQA==
-  /leaflet-geosearch/3.3.2:
+  /leaflet-geosearch/3.4.0:
     dev: false
     optionalDependencies:
       leaflet: 1.7.1
     resolution:
-      integrity: sha512-Kb3NCiG0xWxadRJ0FyNOhFlpN0VT33l1zSpBfWPob6fUfN9bCg6d3XyWTa6KBIQrVRjg30Sp0Cnn+jJWRiFPDA==
+      integrity: sha512-7e/MkZ0Vb1tj7/jxlXOMAZQH3SfcZKY5t23KHnaG/mYaPyaov+Wc6ndYZ3JHyZCWZqC9HF73aIEjhprZeo8bfQ==
   /leaflet/1.7.1:
     dev: false
     resolution:
@@ -4014,7 +4014,7 @@ specifiers:
   eslint-config-next: 11.0.0
   leaflet: ^1.7.1
   leaflet-defaulticon-compatibility: ^0.1.1
-  leaflet-geosearch: ^3.3.2
+  leaflet-geosearch: ^3.4.0
   next: 11.0.0
   package.json: ^2.0.1
   react: 17.0.2

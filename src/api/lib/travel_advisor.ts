@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-import { data_restaurants } from '../../assets/data_restaurants_yelm';
+//import { data_restaurants } from '../../assets/data_restaurants_yelm';
+import { data_restaurants } from '../../assets/data_restaurants_yelm_around';
 
 const url =
   'https://travel-advisor.p.rapidapi.com/restaurants/list-in-boundary';

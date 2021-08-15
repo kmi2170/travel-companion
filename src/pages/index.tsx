@@ -48,9 +48,13 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
 
   useEffect(() => {
     if (dataListPlaces) {
+      const filterdDataListPlaces = dataListPlaces.filter((place) =>
+        place.name ? true : false
+      );
       dispatch({
         type: actionTypes.SET_LIST_RESTAURANTS,
-        payload: dataListPlaces,
+        payload: filterdDataListPlaces,
+        //payload: dataListPlaces,
       });
     }
   }, [dataListPlaces, dispatch]);

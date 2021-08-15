@@ -14,6 +14,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../theme/theme';
 
 import '../styles/globals.css';
+import '../styles/geosearch.css';
+//import 'node_modules/leaflet-geosearch/dist/geosearch.css';
 
 // const queryClient = new QueryClient();
 
