@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import ReactDOMServer from 'react-dom/server';
 
 import L from 'leaflet';
@@ -32,6 +32,7 @@ const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
 const initCenter: LatLng = { lat: 46.94618436001851, lng: -122.6065834708836 };
 const initZoom = 15;
+const zoomWithMarkerText = 14;
 
 const markerIcon = new L.Icon({
   iconUrl: '/icons/marker-icon.png',
@@ -46,7 +47,20 @@ const markerIcon = new L.Icon({
   // iconAnchor: [9, 47],
 });
 
+// @ts-ignore
+const searchControl = new GeoSearch.GeoSearchControl({
+  provider: new OpenStreetMapProvider(),
+  style: 'bar',
+  zoomLevel: 15,
+  marker: {
+    position: 'topright',
+    icon: markerIcon,
+    draggable: false,
+  },
+});
+
 const content = (
+  index: number,
   name: string,
   photo: any,
   rating: string,
@@ -54,6 +68,7 @@ const content = (
 ) =>
   `<div>${ReactDOMServer.renderToString(
     <PopupContent
+      index={index}
       name={name}
       photo={photo}
       rating={rating}
@@ -64,6 +79,10 @@ const content = (
 const Map: React.FC = () => {
   const classes = useStyles();
   const { state, dispatch } = useContext(ListPlacesContext);
+
+  const [isMarkerText, setIsMarkerText] = useState<Boolean>(
+    initZoom > zoomWithMarkerText ? true : false
+  );
 
   // let map = L.map('map1');
   // L.tileLayer(url, { attribution }).addTo(map);
@@ -78,62 +97,81 @@ const Map: React.FC = () => {
       layers: [L.tileLayer(url, { attribution })],
       // closePopupOnClick: false,
     });
+
     map.on('moveend', (e) => {
       getMapBoundsOnMoveend(e.target, actionTypes.SET_BOUNDS, dispatch);
       getMapCenterZoomOnMoveend(e.target);
     });
 
-    // @ts-ignore
-    const search = new GeoSearch.GeoSearchControl({
-      provider: new OpenStreetMapProvider(),
-      style: 'bar',
-      zoomLevel: 15,
-      marker: {
-        position: 'topright',
-        icon: markerIcon,
-        draggable: false,
-      },
+    map.on('zoom', (e) => {
+      const zoom = e.target.getZoom();
+      setIsMarkerText(zoom > zoomWithMarkerText ? true : false);
     });
-    map.addControl(search);
+
+    map.addControl(searchControl);
 
     mapRef.current = map;
 
     getMapBoundsInit(mapRef, actionTypes.SET_BOUNDS, dispatch);
 
-    return () => mapRef.current.remove();
+    return () => {
+      map.removeControl(searchControl);
+      map.remove();
+    };
   }, []);
 
   useEffect(() => {
     state.list_places?.forEach(
-      ({ latitude, longitude, name, photo, rating, num_reviews }) => {
+      ({ latitude, longitude, name, photo, rating, num_reviews }, i) => {
         if (latitude && longitude && name) {
           const popup = L.popup({
             // closeButton: false,
             // closeOnClick: false,
             autoPan: false,
-            maxWidth: 80,
+            maxWidth: 150,
           })
             .setLatLng([latitude, longitude])
-            .setContent(content(name, photo, rating, num_reviews));
+            .setContent(content(i, name, photo, rating, num_reviews));
+          // .on('click', (e) => console.log('click'));
 
-          L.marker([latitude, longitude], { icon: markerIcon })
-            .bindTooltip(name, {
-              permanent: true,
-              direction: 'auto',
-              className: `${styles.transparent_tooltip}`,
-              offset: [10, 0],
-            })
+          document.addEventListener('click', (e: MouseEvent) => {
+            if ((e.target as HTMLElement).id === `pContent${i}`) {
+              console.log('click', i);
+              dispatch({
+                type: actionTypes.SET_POPUP_SELECTED,
+                payload: { selected: i },
+              });
+            }
+          });
+
+          const marker = L.marker([latitude, longitude], { icon: markerIcon })
             .on('mouseover', (e) => {
               e.target.openPopup();
             })
             .bindPopup(popup)
-            .addTo(mapRef.current);
+            .bindTooltip(name, {
+              permanent: true,
+              direction: 'auto',
+              className: `${styles.transparent_tooltip}`,
+              offset: [0, 0],
+            });
+
+          marker.addTo(mapRef.current);
         }
       }
     );
-  }, [state.list_places]);
 
-  return <div id="mymap" style={{ height: '70vh' }} />;
+    if (!isMarkerText) {
+      mapRef.current.eachLayer(function (layer) {
+        if (layer.options.pane === 'tooltipPane')
+          layer.removeFrom(mapRef.current);
+        console.log('removeTooltip');
+      });
+      // console.log(isMarkerText);
+    }
+  }, [state.list_places, isMarkerText]);
+
+  return <div id="mymap" style={{ height: '85vh' }} />;
 };
 
 export default Map;

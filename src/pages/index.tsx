@@ -9,6 +9,7 @@ import {
   Grid,
   Typography,
   CircularProgress,
+  useMediaQuery,
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Home: React.FC<any | null> = ({ dataListPlaces }) => {
   const classes = useStyles();
+  const matches = useMediaQuery('(min-width:600px)');
 
   const { state, dispatch } = useContext(ListPlacesContext);
   // const { query } = useRouter();
@@ -88,17 +90,32 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
   return (
     <div className={classes.root}>
       <SEO />
-      <Container>
+      <Container maxWidth="xl">
+        {/*
         <Typography variant="h3" component="h1">
           Restaurant Finder
         </Typography>
+      */}
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={4}>
-            <ListPlaces />
-          </Grid>
-          <Grid item xs={12} sm={6} md={8}>
-            <Map />
-          </Grid>
+          {!matches ? (
+            <>
+              <Grid item xs={12} sm={6} md={8}>
+                <Map />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <ListPlaces />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid item xs={12} sm={6} md={4}>
+                <ListPlaces />
+              </Grid>
+              <Grid item xs={12} sm={6} md={8}>
+                <Map />
+              </Grid>
+            </>
+          )}
         </Grid>
         <Footer />
       </Container>

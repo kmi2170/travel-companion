@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef, createRef } from 'react';
 
 import { Grid, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -20,7 +20,20 @@ const ListPlaces: React.FC = () => {
   const classes = useStyles();
   const { state } = useContext(ListPlacesContext);
 
-  // console.log('ListPlaces');
+  // const [elRefs, setElRefs] = useState([]);
+  // useEffect(() => {
+  //   setElRefs((refs) =>
+  //     Array(state.list_places?.length)
+  //       .fill()
+  //       .map((_, i) => refs[i] || createRef())
+  //   );
+  // }, [state.list_places]);
+
+  const popupRefs = useRef(new Array(state.list_places?.length));
+
+  const setRefs = (ref: HTMLElement, index: number) => {
+    popupRefs.current[index] = ref;
+  };
 
   return (
     <div>
@@ -30,8 +43,20 @@ const ListPlaces: React.FC = () => {
       </Typography>
       <Grid container spacing={2} className={classes.list}>
         {state.list_places?.map((place, i) => (
-          <Grid item key={i} xs={12}>
-            <PlaceDetails place={place} />
+          <Grid
+            id={`place${i}`}
+            ref={(ref) => setRefs(ref, i)}
+            // ref={elRefs[i]}
+            item
+            key={i}
+            xs={12}
+          >
+            <PlaceDetails
+              index={i}
+              place={place}
+              ref={popupRefs.current[i]}
+              // ref={elRefs[i]}
+            />
           </Grid>
         ))}
       </Grid>
