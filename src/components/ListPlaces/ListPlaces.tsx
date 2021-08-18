@@ -54,7 +54,7 @@ const ListPlaces: React.FC = () => {
             <PlaceDetails
               index={i}
               place={place}
-              ref={popupRefs.current[i]}
+              ref={popupRefs}
               // ref={elRefs[i]}
             />
           </Grid>

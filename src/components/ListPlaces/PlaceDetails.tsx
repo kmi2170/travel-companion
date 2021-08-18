@@ -41,130 +41,130 @@ interface PlaceDetailsProps {
   place: any;
 }
 
-const PlaceDetails: React.FC<PlaceDetailsProps> = (
-  { index, place },
-  ref: HTMLDivElement
-) =>
-  //ref: React.MutableRefObject<HTMLDivElement[]>
-  //ref: React.MutableRefObject<HTMLDivElement>
-  {
-    //const PlaceDetails: React.FC<any> = ({ place }, ref: React.MutableRefObject<HTMLDivElement>)) => {
-    const classes = useStyles();
-    const { state } = useContext(ListPlacesContext);
+const PlaceDetails = (
+  { index, place }: PlaceDetailsProps,
+  ref: React.MutableRefObject<HTMLDivElement[]>
+) => {
+  //const PlaceDetails: React.FC<any> = ({ place }, ref: React.MutableRefObject<HTMLDivElement>)) => {
+  const classes = useStyles();
+  const { state } = useContext(ListPlacesContext);
 
-    if (state.popups.selected === index) {
-      ref?.scrollIntoView({ block: 'start' });
-      // ref?.scrollIntoView();
-      // ref?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // window.scroll(0, ref?.current.offsetTop - 30);
-      // console.log(ref);
-    }
+  if (state.popups.selected === index) {
+    ref?.current[index].scrollIntoView();
+    //ref?.scrollIntoView({ block: 'start' });
+    // ref?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // window.scroll(0, ref?.current.offsetTop - 30);
+    // console.log(ref);
+  }
 
-    return (
-      <div>
-        <Card elevation={6}>
-          <CardMedia
-            component="img"
-            height={300}
-            image={place.photo && place.photo.images.large.url}
-            title={place.name}
-            alt={place.name}
-          />
-          <CardContent>
-            <Typography variant="h5" gutterBottom>
-              {place.name}
+  return (
+    <div>
+      <Card elevation={6}>
+        <CardMedia
+          component="img"
+          height={300}
+          image={place.photo && place.photo.images.large.url}
+          title={place.name}
+          alt={place.name}
+        />
+        <CardContent>
+          <Typography variant="h5" gutterBottom>
+            {place.name}
+          </Typography>
+          <Box display="flex" justifyContent="space-between">
+            <Rating
+              name="read-only"
+              value={+place.rating}
+              precision={0.5}
+              readOnly
+            />
+            <Typography component="legend">
+              {place.num_reviews} review{+place.num_reviews > 1 && 's'}
             </Typography>
-            <Box display="flex" justifyContent="space-between">
-              <Rating
-                name="read-only"
-                value={+place.rating}
-                precision={0.5}
-                readOnly
+          </Box>
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="subtitle1">Price Range</Typography>
+            <Typography variant="subtitle1" gutterBottom>
+              {place.price_level}
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="subtitle1">Ranking</Typography>
+            <Typography variant="subtitle1" gutterBottom>
+              {place.ranking}
+            </Typography>
+          </Box>
+          {place?.awards?.map((award, i) => (
+            <Box
+              key={i}
+              my={1}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="cener"
+            >
+              <Image
+                src="/icons/CERTIFICATE_OF_EXCELLENCE_small-0-5.jpg"
+                //src={award.images.small}
+                height={20}
+                width={20}
+                alt={award.display_name}
               />
-              <Typography component="legend">
-                {place.num_reviews} review{+place.num_reviews > 1 && 's'}
+              {/*
+               */}
+              <Typography variant="subtitle2" color="textSecondary">
+                {award.display_name}
               </Typography>
             </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Typography variant="subtitle1">Price Range</Typography>
-              <Typography variant="subtitle1" gutterBottom>
-                {place.price_level}
-              </Typography>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Typography variant="subtitle1">Ranking</Typography>
-              <Typography variant="subtitle1" gutterBottom>
-                {place.ranking}
-              </Typography>
-            </Box>
-            {place?.awards?.map((award, i) => (
-              <Box
-                key={i}
-                my={1}
-                display="flex"
-                justifyContent="space-between"
-                alignItems="cener"
-              >
-                <Image
-                  src={award.images.small}
-                  height={20}
-                  width={20}
-                  alt={award.display_name}
-                />
-                <Typography variant="subtitle2" color="textSecondary">
-                  {award.display_name}
-                </Typography>
-              </Box>
-            ))}
-            {place?.cuisine?.map(({ name }) => (
-              <Chip
-                key={name}
-                size="small"
-                label={name}
-                className={classes.chip}
-              />
-            ))}
-            {place?.address && (
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                className={classes.address}
-              >
-                <LocationOnIcon />
-                {place.address}
-              </Typography>
-            )}
-            {place?.phone && (
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                className={classes.phone}
-              >
-                <PhoneIcon />
-                {place.phone}
-              </Typography>
-            )}
-            <CardActions>
-              <Button
-                size="small"
-                color="primary"
-                onClick={() => window.open(place.web_url, '_blank')}
-              >
-                Trip Advisor
-              </Button>
-              <Button
-                size="small"
-                color="primary"
-                onClick={() => window.open(place.website, '_blank')}
-              >
-                Website
-              </Button>
-            </CardActions>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  };
+          ))}
+          {place?.cuisine?.map(({ name }) => (
+            <Chip
+              key={name}
+              size="small"
+              label={name}
+              className={classes.chip}
+            />
+          ))}
+          {place?.address && (
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className={classes.address}
+            >
+              <LocationOnIcon />
+              {place.address}
+            </Typography>
+          )}
+          {place?.phone && (
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className={classes.phone}
+            >
+              <PhoneIcon />
+              {place.phone}
+            </Typography>
+          )}
+          <CardActions>
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => window.open(place.web_url, '_blank')}
+            >
+              Trip Advisor
+            </Button>
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => window.open(place.website, '_blank')}
+            >
+              Website
+            </Button>
+          </CardActions>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
 
 export default forwardRef(PlaceDetails);
-// export default PlaceDetails;
+//export default PlaceDetails;

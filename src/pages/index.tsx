@@ -17,6 +17,7 @@ import { ListPlacesContext, actionTypes } from '../reducer/reducer';
 import { fetchRestaurantsByBoundary } from '../api/lib/travel_advisor';
 
 import SEO from '../components/SEO';
+import Navbar from '../components/Navbar';
 import ListPlaces from '../components/ListPlaces/ListPlaces';
 import Footer from '../components/Footer';
 
@@ -90,12 +91,8 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
   return (
     <div className={classes.root}>
       <SEO />
+      <Navbar />
       <Container maxWidth="xl">
-        {/*
-        <Typography variant="h3" component="h1">
-          Restaurant Finder
-        </Typography>
-      */}
         <Grid container spacing={3}>
           {!matches ? (
             <>
