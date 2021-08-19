@@ -1,4 +1,5 @@
-import { createTheme } from '@material-ui/core/styles';
+import { unstable_createMuiStrictModeTheme as createTheme } from '@material-ui/core/styles';
+//import { createTheme } from '@material-ui/core/styles';
 import { responsiveFontSizes } from '@material-ui/core/styles';
 
 import createBreakpoints from '@material-ui/core/styles/createBreakpoints';

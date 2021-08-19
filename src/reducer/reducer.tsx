@@ -5,13 +5,17 @@ const initialState = {
   coords: { lat: null, lng: null },
   bounds: { ne: { lat: null, lng: null }, sw: { lat: null, lng: null } },
   list_places: null,
+  filtered_list_places: null,
+  rating: 0,
   popups: { selected: null },
 };
 
 type StateType = {
   coords: CoordsType;
   bounds: BoundsType;
-  list_places: [];
+  list_places: [] | null;
+  filtered_list_places: [] | null;
+  rating: number;
   popups: {
     selected?: number;
   };
@@ -27,13 +31,17 @@ export enum actionTypes {
   SET_COORDS = 'SET_COORDS',
   SET_BOUNDS = 'SET_BOUNDS',
   SET_LIST_RESTAURANTS = 'SET_LIST_RESTAURANTS',
+  SET_FILTERED_LIST_RESTAURANTS = 'SET_FILTERED_LIST_RESTAURANTS',
+  SET_RATING = 'SET_RATING',
   SET_POPUP_SELECTED = 'SET_POPUP_SELECTED',
 }
 
 type PayloadType = {
   [actionTypes.SET_COORDS]: CoordsType;
   [actionTypes.SET_BOUNDS]: BoundsType;
-  [actionTypes.SET_LIST_RESTAURANTS]: [];
+  [actionTypes.SET_LIST_RESTAURANTS]: [] | null;
+  [actionTypes.SET_FILTERED_LIST_RESTAURANTS]: [] | null;
+  [actionTypes.SET_RATING]: number;
   [actionTypes.SET_POPUP_SELECTED]: { selected: number };
 };
 
@@ -52,6 +60,10 @@ export const reducer = (state: StateType, action: ActionsType) => {
       return { ...state, bounds: action.payload };
     case actionTypes.SET_LIST_RESTAURANTS:
       return { ...state, list_places: action.payload };
+    case actionTypes.SET_FILTERED_LIST_RESTAURANTS:
+      return { ...state, filtered_list_places: action.payload };
+    case actionTypes.SET_RATING:
+      return { ...state, rating: action.payload };
     case actionTypes.SET_POPUP_SELECTED:
       return { ...state, popups: action.payload };
     default:

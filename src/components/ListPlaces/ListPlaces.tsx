@@ -35,14 +35,15 @@ const ListPlaces: React.FC = () => {
     popupRefs.current[index] = ref;
   };
 
+  const list = state.rating ? state.filtered_list_places : state.list_places;
+
   return (
     <div>
       <Typography variant="h6" className={classes.text}>
-        {state.list_places?.length} Result{state.list_places?.length > 1 && 's'}{' '}
-        Found
+        {list?.length} Result{list?.length > 1 && 's'} Found
       </Typography>
       <Grid container spacing={2} className={classes.list}>
-        {state.list_places?.map((place, i) => (
+        {list?.map((place, i) => (
           <Grid
             id={`place${i}`}
             ref={(ref) => setRefs(ref, i)}

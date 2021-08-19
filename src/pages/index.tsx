@@ -17,7 +17,7 @@ import { ListPlacesContext, actionTypes } from '../reducer/reducer';
 import { fetchRestaurantsByBoundary } from '../api/lib/travel_advisor';
 
 import SEO from '../components/SEO';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Navbar/Navbar';
 import ListPlaces from '../components/ListPlaces/ListPlaces';
 import Footer from '../components/Footer';
 
@@ -51,16 +51,31 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
 
   useEffect(() => {
     if (dataListPlaces) {
-      const filterdDataListPlaces = dataListPlaces.filter((place) =>
-        place.name ? true : false
+      const filterdDataListPlaces = dataListPlaces.filter(({ name }) =>
+        name ? true : false
       );
       dispatch({
         type: actionTypes.SET_LIST_RESTAURANTS,
         payload: filterdDataListPlaces,
         //payload: dataListPlaces,
       });
+      dispatch({
+        type: actionTypes.SET_FILTERED_LIST_RESTAURANTS,
+        payload: null,
+      });
     }
   }, [dataListPlaces, dispatch]);
+
+  useEffect(() => {
+    const filterdListPlaces = state.list_places?.filter(
+      ({ rating }) => rating >= state.rating
+    );
+
+    dispatch({
+      type: actionTypes.SET_FILTERED_LIST_RESTAURANTS,
+      payload: filterdListPlaces as [],
+    });
+  }, [state.rating]);
 
   useEffect(() => {
     if (state.bounds.ne.lat && state.bounds.ne.lng) {
