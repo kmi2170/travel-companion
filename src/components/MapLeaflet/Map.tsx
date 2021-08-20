@@ -83,6 +83,7 @@ const Map: React.FC = () => {
   const [isMarkerText, setIsMarkerText] = useState<Boolean>(
     initZoom > zoomWithMarkerText ? true : false
   );
+  // const [isTypeChanged, setIsTypeChanged] = useState<Boolean>(false);
 
   // let map = L.map('map1');
   // L.tileLayer(url, { attribution }).addTo(map);
@@ -98,17 +99,17 @@ const Map: React.FC = () => {
       // closePopupOnClick: false,
     });
 
+    map.addControl(searchControl);
+
     map.on('moveend', (e) => {
-      getMapBoundsOnMoveend(e.target, actionTypes.SET_BOUNDS, dispatch);
+      getMapBoundsOnMoveend(e, actionTypes.SET_BOUNDS, dispatch);
       getMapCenterZoomOnMoveend(e.target);
     });
 
     map.on('zoom', (e) => {
       const zoom = e.target.getZoom();
-      setIsMarkerText(zoom > zoomWithMarkerText ? true : false);
+      setIsMarkerText(zoom > zoomWithMarkerText);
     });
-
-    map.addControl(searchControl);
 
     mapRef.current = map;
 
@@ -120,19 +121,31 @@ const Map: React.FC = () => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   setIsTypeChanged(true);
+  //   console.log('useEffect setIsTypeChanged');
+  // }, [state.type]);
+
   useEffect(() => {
+    mapRef.current.eachLayer(function (layer) {
+      if (layer.options.pane === 'markerPane') {
+        layer.removeFrom(mapRef.current);
+        console.log('removeMarker');
+      }
+    });
+
     state.list_places?.forEach(
       ({ latitude, longitude, name, photo, rating, num_reviews }, i) => {
         if (latitude && longitude && name) {
           const popup = L.popup({
+            maxWidth: 150,
+            autoPan: true,
+            // keepInView: true,
             // closeButton: false,
             // closeOnClick: false,
-            autoPan: false,
-            maxWidth: 150,
           })
             .setLatLng([latitude, longitude])
             .setContent(content(i, name, photo, rating, num_reviews));
-          // .on('click', (e) => console.log('click'));
 
           document.addEventListener('click', (e: MouseEvent) => {
             if ((e.target as HTMLElement).id === `pContent${i}`) {
@@ -144,32 +157,34 @@ const Map: React.FC = () => {
             }
           });
 
-          const marker = L.marker([latitude, longitude], { icon: markerIcon })
+          const markers = L.marker([latitude, longitude], { icon: markerIcon })
             .on('mouseover', (e) => {
               e.target.openPopup();
             })
-            .bindPopup(popup)
-            .bindTooltip(name, {
+            .bindPopup(popup);
+
+          if (isMarkerText)
+            markers.bindTooltip(name, {
               permanent: true,
               direction: 'auto',
               className: `${styles.transparent_tooltip}`,
               offset: [0, 0],
             });
 
-          marker.addTo(mapRef.current);
+          markers.addTo(mapRef.current);
         }
       }
     );
 
-    if (!isMarkerText) {
-      mapRef.current.eachLayer(function (layer) {
-        if (layer.options.pane === 'tooltipPane')
-          layer.removeFrom(mapRef.current);
-        console.log('removeTooltip');
-      });
-      // console.log(isMarkerText);
-    }
-  }, [state.list_places, isMarkerText]);
+    // if (!isMarkerText) {
+    //   mapRef.current.eachLayer(function (layer) {
+    //     if (layer.options.pane === 'tooltipPane') {
+    //       layer.removeFrom(mapRef.current);
+    //       console.log('removeTooltip');
+    //     }
+    //   });
+    // }
+  }, [state.list_places]);
 
   return <div id="mymap" style={{ height: '85vh' }} />;
 };

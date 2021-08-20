@@ -5,7 +5,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { ListPlacesContext } from '../../reducer/reducer';
 import PlaceDetails from './PlaceDetails';
-// import Preview from '../Preview';
+import Preview from '../Preview';
 
 const useStyles = makeStyles((theme: Theme) => ({
   text: {},
@@ -64,7 +64,7 @@ const ListPlaces: React.FC = () => {
 
       {/* 
       <Preview data={state.bounds} />
-      <Preview data={state.list_restaurants} />
+      <Preview data={state.list_places} />
       */}
     </div>
   );

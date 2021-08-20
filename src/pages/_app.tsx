@@ -1,4 +1,5 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 
@@ -17,16 +18,31 @@ import '../styles/globals.css';
 import '../styles/geosearch.css';
 //import 'node_modules/leaflet-geosearch/dist/geosearch.css';
 
+import * as gtag from '../lib/gtag';
+
 // const queryClient = new QueryClient();
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
-  React.useEffect(() => {
+  useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
+
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      gtag.pageview(url);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
     <ThemeProvider theme={theme}>

@@ -14,24 +14,12 @@ import {
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { ListPlacesContext, actionTypes } from '../reducer/reducer';
-import { fetchRestaurantsByBoundary } from '../api/lib/travel_advisor';
+import { fetchPlacesByBoundary } from '../api/lib/travel_advisor';
 
 import SEO from '../components/SEO';
 import Navbar from '../components/Navbar/Navbar';
 import ListPlaces from '../components/ListPlaces/ListPlaces';
 import Footer from '../components/Footer';
-
-// const url = 'https://api.adviceslip.com/advice';
-
-// const fetcher = async (url: string) => {
-//   try {
-//     const { data } = await axios(url);
-//     // console.log(data);
-//     return data;
-//   } catch (error) {
-//     console.error();
-//   }
-// };
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -47,24 +35,36 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
   const matches = useMediaQuery('(min-width:600px)');
 
   const { state, dispatch } = useContext(ListPlacesContext);
-  // const { query } = useRouter();
+  const { query } = useRouter();
 
   useEffect(() => {
     if (dataListPlaces) {
       const filterdDataListPlaces = dataListPlaces.filter(({ name }) =>
-        name ? true : false
+        Boolean(name)
       );
+
       dispatch({
-        type: actionTypes.SET_LIST_RESTAURANTS,
+        type: actionTypes.SET_LIST_PLACES,
         payload: filterdDataListPlaces,
-        //payload: dataListPlaces,
       });
       dispatch({
-        type: actionTypes.SET_FILTERED_LIST_RESTAURANTS,
+        type: actionTypes.SET_FILTERED_LIST_PLACES,
         payload: null,
       });
     }
   }, [dataListPlaces, dispatch]);
+
+  useEffect(() => {
+    dispatch({
+      type: actionTypes.SET_RATING,
+      payload: 0,
+    });
+
+    router.push({
+      pathname: '/',
+      query: { ...query, type: state.type },
+    });
+  }, [state.type]);
 
   useEffect(() => {
     const filterdListPlaces = state.list_places?.filter(
@@ -72,7 +72,7 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
     );
 
     dispatch({
-      type: actionTypes.SET_FILTERED_LIST_RESTAURANTS,
+      type: actionTypes.SET_FILTERED_LIST_PLACES,
       payload: filterdListPlaces as [],
     });
   }, [state.rating]);
@@ -82,6 +82,7 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
       router.push({
         pathname: '/',
         query: {
+          type: state.type,
           neLat: state.bounds.ne.lat,
           neLng: state.bounds.ne.lng,
           swLat: state.bounds.sw.lat,
@@ -138,11 +139,12 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { neLat, neLng, swLat, swLng } = query;
+  const { type, neLat, neLng, swLat, swLng } = query;
 
   const dataListPlaces =
     neLat && neLng && swLat && swLng
-      ? await fetchRestaurantsByBoundary(
+      ? await fetchPlacesByBoundary(
+          type as string,
           neLat as string,
           neLng as string,
           swLat as string,

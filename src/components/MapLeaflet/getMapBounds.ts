@@ -19,8 +19,8 @@ export const getMapBoundsOnMoveend = async (
   actionTypes: string,
   dispatch: ({}) => void
 ) => {
-  const ne = e.getBounds().getNorthEast();
-  const sw = e.getBounds().getSouthWest();
+  const ne = e.target.getBounds().getNorthEast();
+  const sw = e.target.getBounds().getSouthWest();
   bounds.push({ ne, sw });
 
   await new Promise(() =>

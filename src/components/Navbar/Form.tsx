@@ -37,12 +37,37 @@ const Component: React.FC = () => {
   const classes = useStyles();
   const { state, dispatch } = useContext(ListPlacesContext);
 
+  const handeleSetType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch({ type: actionTypes.SET_TYPE, payload: e.target.value });
+  };
+
   const handeleSetRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({ type: actionTypes.SET_RATING, payload: +e.target.value });
   };
 
   return (
     <div className={classes.formContainer}>
+      <Typography variant="h6" align="center" className={classes.label}>
+        Type
+      </Typography>
+      <FormControl
+        variant="outlined"
+        size="small"
+        margin="none"
+        className={classes.formControl}
+      >
+        <Select
+          id="rating"
+          value={state.type}
+          onChange={handeleSetType}
+          defaultValue="restaurants"
+          className={classes.select}
+        >
+          <MenuItem value="hotels">Hotels</MenuItem>
+          <MenuItem value="restaurants">Restaurants</MenuItem>
+          <MenuItem value="attractions">Attractions</MenuItem>
+        </Select>
+      </FormControl>
       <Typography variant="h6" align="center" className={classes.label}>
         Rating
       </Typography>
