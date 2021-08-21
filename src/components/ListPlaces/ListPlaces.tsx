@@ -35,7 +35,9 @@ const ListPlaces: React.FC = () => {
     popupRefs.current[index] = ref;
   };
 
-  const list = state.rating ? state.filtered_list_places : state.list_places;
+  const list = state.filtered_list_places?.length
+    ? state.filtered_list_places
+    : state.list_places;
 
   return (
     <div>

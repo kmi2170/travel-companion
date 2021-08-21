@@ -38,46 +38,6 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
   const { query } = useRouter();
 
   useEffect(() => {
-    if (dataListPlaces) {
-      const filterdDataListPlaces = dataListPlaces.filter(({ name }) =>
-        Boolean(name)
-      );
-
-      dispatch({
-        type: actionTypes.SET_LIST_PLACES,
-        payload: filterdDataListPlaces,
-      });
-      dispatch({
-        type: actionTypes.SET_FILTERED_LIST_PLACES,
-        payload: null,
-      });
-    }
-  }, [dataListPlaces, dispatch]);
-
-  useEffect(() => {
-    dispatch({
-      type: actionTypes.SET_RATING,
-      payload: 0,
-    });
-
-    router.push({
-      pathname: '/',
-      query: { ...query, type: state.type },
-    });
-  }, [state.type]);
-
-  useEffect(() => {
-    const filterdListPlaces = state.list_places?.filter(
-      ({ rating }) => rating >= state.rating
-    );
-
-    dispatch({
-      type: actionTypes.SET_FILTERED_LIST_PLACES,
-      payload: filterdListPlaces as [],
-    });
-  }, [state.rating]);
-
-  useEffect(() => {
     if (state.bounds.ne.lat && state.bounds.ne.lng) {
       router.push({
         pathname: '/',
@@ -91,6 +51,51 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
       });
     }
   }, [state.bounds]);
+
+  useEffect(() => {
+    if (dataListPlaces) {
+      const dataListPlacesValid = dataListPlaces.filter(({ name }) =>
+        Boolean(name)
+      );
+
+      const filterdListPlaces = state.rating
+        ? []
+        : dataListPlacesValid.filter(({ rating }) => rating >= state.rating);
+
+      dispatch({
+        type: actionTypes.SET_LIST_PLACES,
+        payload: dataListPlacesValid,
+      });
+
+      dispatch({
+        type: actionTypes.SET_FILTERED_LIST_PLACES,
+        payload: filterdListPlaces,
+      });
+    }
+  }, [dataListPlaces]);
+
+  useEffect(() => {
+    const filterdListPlaces = state.list_places?.filter(
+      ({ rating }) => rating >= state.rating
+    );
+
+    dispatch({
+      type: actionTypes.SET_FILTERED_LIST_PLACES,
+      payload: filterdListPlaces as [],
+    });
+  }, [state.rating]);
+
+  useEffect(() => {
+    dispatch({
+      type: actionTypes.SET_RATING,
+      payload: 0,
+    });
+
+    router.push({
+      pathname: '/',
+      query: { ...query, type: state.type },
+    });
+  }, [state.type]);
 
   const displayLoading = () => <CircularProgress />;
 

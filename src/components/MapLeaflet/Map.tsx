@@ -134,7 +134,11 @@ const Map: React.FC = () => {
       }
     });
 
-    state.list_places?.forEach(
+    const list = state.filtered_list_places?.length
+      ? state.filtered_list_places
+      : state.list_places;
+
+    list?.forEach(
       ({ latitude, longitude, name, photo, rating, num_reviews }, i) => {
         if (latitude && longitude && name) {
           const popup = L.popup({
@@ -184,7 +188,7 @@ const Map: React.FC = () => {
     //     }
     //   });
     // }
-  }, [state.list_places]);
+  }, [state.rating, state.list_places, state.filtered_list_places]);
 
   return <div id="mymap" style={{ height: '85vh' }} />;
 };
