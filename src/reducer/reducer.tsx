@@ -9,6 +9,7 @@ const initialState = {
   type: 'restaurants',
   rating: 0,
   popups: { selected: null },
+  isLoading: false,
 };
 
 type StateType = {
@@ -21,6 +22,7 @@ type StateType = {
   popups: {
     selected?: number;
   };
+  isLoading: boolean;
 };
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -37,6 +39,7 @@ export enum actionTypes {
   SET_TYPE = 'SET_TYPE',
   SET_RATING = 'SET_RATING',
   SET_POPUP_SELECTED = 'SET_POPUP_SELECTED',
+  SET_IS_LOADING = 'SET_IS_LOADING',
 }
 
 type PayloadType = {
@@ -47,6 +50,7 @@ type PayloadType = {
   [actionTypes.SET_TYPE]: string;
   [actionTypes.SET_RATING]: number;
   [actionTypes.SET_POPUP_SELECTED]: { selected: number };
+  [actionTypes.SET_IS_LOADING]: boolean;
 };
 
 export type ActionsType = ActionMap<PayloadType>[keyof ActionMap<PayloadType>];
@@ -72,6 +76,8 @@ export const reducer = (state: StateType, action: ActionsType) => {
       return { ...state, rating: action.payload };
     case actionTypes.SET_POPUP_SELECTED:
       return { ...state, popups: action.payload };
+    case actionTypes.SET_IS_LOADING:
+      return { ...state, isLoading: action.payload };
     default:
       return state;
   }

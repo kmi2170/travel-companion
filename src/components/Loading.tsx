@@ -7,8 +7,10 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       '& > * + *': {
-        marginLeft: theme.spacing(2),
+        marginLeft: theme.spacing(0),
       },
+      marginTop: '40vh',
+      justifyContent: 'center',
     },
   })
 );
@@ -18,7 +20,6 @@ const Loading: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      Loading...
       <CircularProgress />
     </div>
   );

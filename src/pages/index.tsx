@@ -7,8 +7,8 @@ import axios from 'axios';
 import {
   Container,
   Grid,
+  Box,
   Typography,
-  CircularProgress,
   useMediaQuery,
 } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -17,6 +17,7 @@ import { ListPlacesContext, actionTypes } from '../reducer/reducer';
 import { fetchPlacesByBoundary } from '../api/lib/travel_advisor';
 
 import SEO from '../components/SEO';
+import Loading from '../components/Loading';
 import Navbar from '../components/Navbar/Navbar';
 import ListPlaces from '../components/ListPlaces/ListPlaces';
 import Footer from '../components/Footer';
@@ -27,6 +28,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     // backgroundImage:
     //   'linear-gradient(to bottom, rgb(102,255,255,0.15), rgba(218,165,32,0.25))',
     // height: '100vh',
+  },
+  footerContaienr: {
+    marginTop: theme.spacing(2),
+  },
+  mapContainer: {
+    marginTop: theme.spacing(2),
+    background: 'pink',
   },
 }));
 
@@ -53,6 +61,11 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
   }, [state.bounds]);
 
   useEffect(() => {
+    dispatch({
+      type: actionTypes.SET_IS_LOADING,
+      payload: true,
+    });
+
     if (dataListPlaces) {
       const dataListPlacesValid = dataListPlaces.filter(({ name }) =>
         Boolean(name)
@@ -71,10 +84,20 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
         type: actionTypes.SET_FILTERED_LIST_PLACES,
         payload: filterdListPlaces,
       });
+
+      dispatch({
+        type: actionTypes.SET_IS_LOADING,
+        payload: false,
+      });
     }
   }, [dataListPlaces]);
 
   useEffect(() => {
+    dispatch({
+      type: actionTypes.SET_IS_LOADING,
+      payload: true,
+    });
+
     const filterdListPlaces = state.list_places?.filter(
       ({ rating }) => rating >= state.rating
     );
@@ -83,9 +106,19 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
       type: actionTypes.SET_FILTERED_LIST_PLACES,
       payload: filterdListPlaces as [],
     });
+
+    dispatch({
+      type: actionTypes.SET_IS_LOADING,
+      payload: false,
+    });
   }, [state.rating]);
 
   useEffect(() => {
+    dispatch({
+      type: actionTypes.SET_IS_LOADING,
+      payload: true,
+    });
+
     dispatch({
       type: actionTypes.SET_RATING,
       payload: 0,
@@ -97,7 +130,7 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
     });
   }, [state.type]);
 
-  const displayLoading = () => <CircularProgress />;
+  const displayLoading = () => <Loading />;
 
   const Map: any = useMemo(
     () =>
@@ -118,24 +151,30 @@ const Home: React.FC<any | null> = ({ dataListPlaces }) => {
           {!matches ? (
             <>
               <Grid item xs={12} sm={6} md={8}>
-                <Map />
+                <div className={classes.mapContainer}>
+                  <Map />
+                </div>
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
-                <ListPlaces />
+                {state.isLoading ? <Loading /> : <ListPlaces />}
               </Grid>
             </>
           ) : (
             <>
               <Grid item xs={12} sm={6} md={4}>
-                <ListPlaces />
+                {state.isLoading ? <Loading /> : <ListPlaces />}
               </Grid>
               <Grid item xs={12} sm={6} md={8}>
-                <Map />
+                <div className={classes.mapContainer}>
+                  <Map />
+                </div>
               </Grid>
             </>
           )}
         </Grid>
-        <Footer />
+        <div className={classes.footerContaienr}>
+          <Footer />
+        </div>
       </Container>
     </div>
   );
