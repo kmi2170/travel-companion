@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 
+import { CookiesProvider } from 'react-cookie';
+
 // import { QueryClientProvider } from 'react-query';
 // import { Hydrate } from 'react-query/hydration';
 // import queryClient from '../utils/reactQuery';
@@ -17,6 +19,8 @@ import theme from '../theme/theme';
 import '../styles/globals.css';
 import '../styles/geosearch.css';
 //import 'node_modules/leaflet-geosearch/dist/geosearch.css';
+
+import SEO from '../components/SEO';
 
 import * as gtag from '../lib/gtag';
 
@@ -49,17 +53,19 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
       {/* <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}> */}
       <Head>
-        <title>Advice Appli</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
+        <SEO />
       </Head>
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
       <CssBaseline />
-      <ListRestaurantsContextProvider>
-        <Component {...pageProps} />
-      </ListRestaurantsContextProvider>
+      <CookiesProvider>
+        <ListRestaurantsContextProvider>
+          <Component {...pageProps} />
+        </ListRestaurantsContextProvider>
+      </CookiesProvider>
       {/* <ReactQueryDevtools />
         </Hydrate>
       </QueryClientProvider> */}

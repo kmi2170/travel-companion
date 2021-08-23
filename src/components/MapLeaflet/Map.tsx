@@ -21,7 +21,6 @@ import {
 import PopupContent from './PopupContent';
 
 import styles from './Map.module.css';
-
 const useStyles = makeStyles((theme: Theme) => ({
   text: {},
 }));
@@ -30,9 +29,10 @@ const attribution =
   '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
 const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-const initCenter: LatLng = { lat: 46.94618436001851, lng: -122.6065834708836 };
-const initZoom = 15;
-const zoomWithMarkerText = 14;
+// const initCenter: LatLng = { lat: 46.94618436001851, lng: -122.6065834708836 }; //Yelm
+const initCenter: LatLng = { lat: 40.69729900863675, lng: -73.97918701171876 }; // New York
+const initZoom = 12;
+const zoomWithMarkerText = 15;
 
 const markerIcon = new L.Icon({
   iconUrl: '/icons/marker-icon.png',
@@ -51,7 +51,7 @@ const markerIcon = new L.Icon({
 const searchControl = new GeoSearch.GeoSearchControl({
   provider: new OpenStreetMapProvider(),
   style: 'bar',
-  zoomLevel: 15,
+  retainZoomLevel: true,
   marker: {
     position: 'topright',
     icon: markerIcon,
@@ -91,10 +91,15 @@ const Map: React.FC = () => {
 
   const mapRef = useRef(null);
 
+  console.log(state.init_coords);
   useEffect(() => {
     let map = L.map('mymap', {
-      center: initCenter,
+      center:
+        state.init_coords.lat && state.init_coords.lng
+          ? state.init_coords
+          : initCenter,
       zoom: initZoom,
+      scrollWheelZoom: false,
       layers: [L.tileLayer(url, { attribution })],
       // closePopupOnClick: false,
     });
@@ -103,7 +108,7 @@ const Map: React.FC = () => {
 
     map.on('moveend', (e) => {
       getMapBoundsOnMoveend(e, actionTypes.SET_BOUNDS, dispatch);
-      getMapCenterZoomOnMoveend(e.target);
+      getMapCenterZoomOnMoveend(e.target, actionTypes.SET_COORDS, dispatch);
     });
 
     map.on('zoom', (e) => {
@@ -161,33 +166,39 @@ const Map: React.FC = () => {
             }
           });
 
-          const markers = L.marker([latitude, longitude], { icon: markerIcon })
+          const marker = L.marker([latitude, longitude], { icon: markerIcon })
             .on('mouseover', (e) => {
               e.target.openPopup();
             })
             .bindPopup(popup);
 
           if (isMarkerText)
-            markers.bindTooltip(name, {
+            marker.bindTooltip(name, {
               permanent: true,
               direction: 'auto',
               className: `${styles.transparent_tooltip}`,
               offset: [0, 0],
             });
 
-          markers.addTo(mapRef.current);
+          marker.addTo(mapRef.current);
         }
       }
     );
 
-    // if (!isMarkerText) {
-    //   mapRef.current.eachLayer(function (layer) {
-    //     if (layer.options.pane === 'tooltipPane') {
-    //       layer.removeFrom(mapRef.current);
-    //       console.log('removeTooltip');
-    //     }
-    //   });
-    // }
+    if (state.list_weather?.length) {
+      state.list_weather.map(({ coord: { Lat, Lon }, weather }) => {
+        // const weatherIcon = null;
+        const weatherIcon = new L.Icon({
+          iconUrl: ` http://openweathermap.org/img/wn/${weather[0]['icon']}@2x.png`,
+          iconSize: [75, 75],
+        });
+        const weatherMarker = L.marker([Lat, Lon], {
+          icon: weatherIcon,
+        });
+
+        weatherMarker.addTo(mapRef.current);
+      });
+    }
   }, [state.rating, state.list_places, state.filtered_list_places]);
 
   return <div id="mymap" style={{ height: '85vh' }} />;

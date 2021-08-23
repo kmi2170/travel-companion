@@ -4,7 +4,7 @@ import axios from 'axios';
 import { data_restaurants } from '../../assets/data_restaurants_yelm_around';
 import { data_attractions } from '../../assets/data_attractions_yelm_wide';
 
-export const fetchPlacesByBoundary = async (
+export const fetchPlacesByBounds = async (
   type: string,
   neLat: string,
   neLng: string,

@@ -41,7 +41,11 @@ export const getMapBoundsOnMoveend = async (
 let centers = [];
 let zooms = [];
 
-export const getMapCenterZoomOnMoveend = async (e: any) => {
+export const getMapCenterZoomOnMoveend = async (
+  e: any,
+  actionTypes: string,
+  dispatch: ({}) => void
+) => {
   const center = e.getCenter();
   const zoom = e.getZoom();
   centers.push(center);
@@ -50,6 +54,11 @@ export const getMapCenterZoomOnMoveend = async (e: any) => {
   await new Promise(() =>
     setTimeout(() => {
       if (centers.length > 0) {
+        dispatch({
+          type: actionTypes,
+          payload: centers[centers.length - 1],
+        });
+
         console.log(centers[centers.length - 1]);
         console.log(zooms[zooms.length - 1]);
 
