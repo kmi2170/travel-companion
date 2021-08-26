@@ -19,6 +19,7 @@ import {
   getMapCenterZoomOnMoveend,
 } from './getMapBounds';
 import PopupContent from './PopupContent';
+import PopupContentWeather from './PopupContentWeather';
 
 import styles from './Map.module.css';
 const useStyles = makeStyles((theme: Theme) => ({
@@ -74,6 +75,11 @@ const content = (
       rating={rating}
       num_reviews={num_reviews}
     />
+  )}</div>`;
+
+const contentWeather = (description: string, temp: number) =>
+  `<div>${ReactDOMServer.renderToString(
+    <PopupContentWeather description={description} temp={temp} />
   )}</div>`;
 
 const Map: React.FC = () => {
@@ -186,18 +192,34 @@ const Map: React.FC = () => {
     );
 
     if (state.list_weather?.length) {
-      state.list_weather.map(({ coord: { Lat, Lon }, weather }) => {
-        // const weatherIcon = null;
-        const weatherIcon = new L.Icon({
-          iconUrl: ` http://openweathermap.org/img/wn/${weather[0]['icon']}@2x.png`,
-          iconSize: [75, 75],
-        });
-        const weatherMarker = L.marker([Lat, Lon], {
-          icon: weatherIcon,
-        });
+      state.list_weather.map(
+        ({ coord: { Lat, Lon }, weather, main: { temp } }) => {
+          const popupWeather = L.popup({
+            maxWidth: 150,
+            // autoPan: true,
+            // keepInView: true,
+            // closeButton: false,
+            // closeOnClick: false,
+          })
+            .setLatLng([Lat, Lon])
+            .setContent(contentWeather(weather[0]['description'], temp));
 
-        weatherMarker.addTo(mapRef.current);
-      });
+          // const weatherIcon = null;
+          const weatherIcon = new L.Icon({
+            iconUrl: ` http://openweathermap.org/img/wn/${weather[0]['icon']}@2x.png`,
+            iconSize: [75, 75],
+          });
+          const weatherMarker = L.marker([Lat, Lon], {
+            icon: weatherIcon,
+          })
+            .bindPopup(popupWeather)
+            .on('mouseover', (e) => {
+              e.target.openPopup();
+            });
+
+          weatherMarker.addTo(mapRef.current);
+        }
+      );
     }
   }, [state.rating, state.list_places, state.filtered_list_places]);
 

@@ -15,8 +15,9 @@ export const fetchOpenWeatherCurrentByBounds = async (
   try {
     const { data } = await axios.get(url, {
       params: {
-        bbox: `${neLng},${swLat},${swLng},${neLat},10`,
+        bbox: `${neLng},${swLat},${swLng},${neLat},15`,
         //bbox: `${neLng},${swLat},${swLng},${neLat},${zoom}`,
+        units: 'imperial',
         appid: api_key,
       },
     });
