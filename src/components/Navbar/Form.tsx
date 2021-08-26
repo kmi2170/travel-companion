@@ -5,7 +5,8 @@ import {
   FormControl,
   Select,
   MenuItem,
-  // InputLabel,
+  useMediaQuery,
+  InputLabel,
 } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -18,15 +19,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    minWidth: '250px',
+    // minWidth: '300px',
     background: blue[800],
   },
   formControl: {
+    marginRight: theme.spacing(2),
     // margin: theme.spacing(0),
-    minWidth: 150,
+    // minWidth: 125,
   },
   label: {
     font: 'white',
+    margin: theme.spacing(0, 2),
   },
   select: {
     background: 'white',
@@ -35,6 +38,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Component: React.FC = () => {
   const classes = useStyles();
+  const matches = useMediaQuery('(min-width:600px)');
+
   const { state, dispatch } = useContext(ListPlacesContext);
 
   const handeleSetType = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -47,9 +52,11 @@ const Component: React.FC = () => {
 
   return (
     <div className={classes.formContainer}>
-      <Typography variant="h6" align="center" className={classes.label}>
-        Type
-      </Typography>
+      {matches && (
+        <Typography variant="h6" align="center" className={classes.label}>
+          Type
+        </Typography>
+      )}
       <FormControl
         variant="outlined"
         size="small"
@@ -68,18 +75,22 @@ const Component: React.FC = () => {
           <MenuItem value="attractions">Attractions</MenuItem>
         </Select>
       </FormControl>
-      <Typography variant="h6" align="center" className={classes.label}>
-        Rating
-      </Typography>
+      {matches && (
+        <Typography variant="h6" align="center" className={classes.label}>
+          Rating
+        </Typography>
+      )}
       <FormControl
         variant="outlined"
         size="small"
         margin="none"
         className={classes.formControl}
       >
-        {/* <InputLabel id="rating" shrink>
+        {/*
+        <InputLabel id="rating" margin="dense" shrink>
           Rating
-        </InputLabel> */}
+        </InputLabel>
+         */}
         <Select
           id="rating"
           value={state.rating}
@@ -87,7 +98,7 @@ const Component: React.FC = () => {
           defaultValue="0"
           className={classes.select}
         >
-          <MenuItem value="0">All</MenuItem>
+          <MenuItem value="0">All Ratings</MenuItem>
           <MenuItem value="3">3 and above</MenuItem>
           <MenuItem value="4">4 and above</MenuItem>
           <MenuItem value="4.5">4.5 and above</MenuItem>

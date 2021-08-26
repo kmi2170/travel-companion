@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext, useRef, createRef } from 'react';
 
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { ListPlacesContext } from '../../reducer/reducer';
 import PlaceDetails from './PlaceDetails';
+import FloatingButton from '../FloatingButton';
 import Preview from '../Preview';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -18,6 +19,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const ListPlaces: React.FC = () => {
   const classes = useStyles();
+  const matches = useMediaQuery('(min-width:600px)');
+
   const { state } = useContext(ListPlacesContext);
 
   // const [elRefs, setElRefs] = useState([]);
@@ -45,6 +48,7 @@ const ListPlaces: React.FC = () => {
         {list?.length} Result{list?.length > 1 && 's'} Found
       </Typography>
       <Grid container spacing={2} className={classes.list}>
+        {!matches && <FloatingButton />}
         {list?.map((place, i) => (
           <Grid
             id={`place${i}`}

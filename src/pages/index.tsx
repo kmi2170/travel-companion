@@ -33,10 +33,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     // height: '100vh',
   },
   footerContaienr: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
   },
   mapContainer: {
     marginTop: theme.spacing(2),
+  },
+  floatButtonContainer: {
+    // display: 'flex',
+    // justifyContent: 'center',
+    // marginTop: theme.spacing(2),
   },
 }));
 
