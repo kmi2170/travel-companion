@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
     <AppBar position="sticky">
       <Toolbar variant="dense" className={classes.toolBar}>
         <Typography variant="h5" component="h1" className={classes.title}>
-          Spot Finder
+          Travel Companion
         </Typography>
         <Form />
       </Toolbar>

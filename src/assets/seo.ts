@@ -1,5 +1,5 @@
 export const config = {
-  title: 'Fun Spot Finder',
+  title: 'Travel Companion',
   author: 'Kmi, Web developer/programmer',
   // author: {
   //   name: 'Kmi',
