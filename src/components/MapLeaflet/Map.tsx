@@ -8,10 +8,6 @@ import { LatLng } from 'leaflet-geosearch/dist/providers/provider';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import * as GeoSearch from 'leaflet-geosearch';
 
-import { Typography } from '@material-ui/core';
-import Rating from '@material-ui/lab/Rating';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-
 import { ListPlacesContext, actionTypes } from '../../reducer/reducer';
 import {
   getMapBoundsInit,
@@ -22,9 +18,6 @@ import PopupContent from './PopupContent';
 import PopupContentWeather from './PopupContentWeather';
 
 import styles from './Map.module.css';
-const useStyles = makeStyles((theme: Theme) => ({
-  text: {},
-}));
 
 const attribution =
   '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
@@ -83,21 +76,15 @@ const contentWeather = (description: string, temp: number) =>
   )}</div>`;
 
 const Map: React.FC = () => {
-  const classes = useStyles();
   const { state, dispatch } = useContext(ListPlacesContext);
 
   const [isMarkerText, setIsMarkerText] = useState<Boolean>(
     initZoom > zoomWithMarkerText ? true : false
   );
-  // const [isTypeChanged, setIsTypeChanged] = useState<Boolean>(false);
-
-  // let map = L.map('map1');
-  // L.tileLayer(url, { attribution }).addTo(map);
-  // map.setView([47, -122], 10);
 
   const mapRef = useRef(null);
 
-  console.log(state.init_coords);
+  // console.log('Map init_coords', state.init_coords);
   useEffect(() => {
     let map = L.map('mymap', {
       center:
@@ -131,11 +118,6 @@ const Map: React.FC = () => {
       map.remove();
     };
   }, []);
-
-  // useEffect(() => {
-  //   setIsTypeChanged(true);
-  //   console.log('useEffect setIsTypeChanged');
-  // }, [state.type]);
 
   useEffect(() => {
     mapRef.current.eachLayer(function (layer) {
@@ -204,18 +186,15 @@ const Map: React.FC = () => {
             .setLatLng([Lat, Lon])
             .setContent(contentWeather(weather[0]['description'], temp));
 
-          // const weatherIcon = null;
           const weatherIcon = new L.Icon({
             iconUrl: ` http://openweathermap.org/img/wn/${weather[0]['icon']}@2x.png`,
-            iconSize: [75, 75],
+            iconSize: [50, 50],
           });
-          const weatherMarker = L.marker([Lat, Lon], {
-            icon: weatherIcon,
-          })
-            .bindPopup(popupWeather)
+          const weatherMarker = L.marker([Lat, Lon], { icon: weatherIcon })
             .on('mouseover', (e) => {
               e.target.openPopup();
-            });
+            })
+            .bindPopup(popupWeather);
 
           weatherMarker.addTo(mapRef.current);
         }

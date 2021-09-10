@@ -6,13 +6,7 @@ import { GetServerSideProps } from 'next';
 
 import { useCookies } from 'react-cookie';
 
-import {
-  Container,
-  Grid,
-  Box,
-  Typography,
-  useMediaQuery,
-} from '@material-ui/core';
+import { Container, Grid, useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { ListPlacesContext, actionTypes } from '../reducer/reducer';
@@ -21,6 +15,7 @@ import { fetchOpenWeatherCurrentByBounds } from '../api/lib/open_weather';
 import { ipLookup } from '../api/lib/ipLookup';
 
 import Loading from '../components/Loading';
+import SEO from '../components/SEO';
 import Navbar from '../components/Navbar/Navbar';
 import ListPlaces from '../components/ListPlaces/ListPlaces';
 import Footer from '../components/Footer';
@@ -37,6 +32,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   mapContainer: {
     marginTop: theme.spacing(2),
+  },
+  listContainer: {
+    marginTop: theme.spacing(3),
   },
   floatButtonContainer: {
     // display: 'flex',
@@ -58,7 +56,7 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ dataListPlaces, dataListWeather }) => {
   const classes = useStyles();
-  const matches = useMediaQuery('(min-width:600px)');
+  const isDesktop = useMediaQuery('(min-width:600px)');
 
   const { state, dispatch } = useContext(ListPlacesContext);
   const { query } = useRouter();
@@ -191,6 +189,11 @@ const Home: React.FC<HomeProps> = ({ dataListPlaces, dataListWeather }) => {
       payload: 0,
     });
 
+    dispatch({
+      type: actionTypes.SET_POPUP_SELECTED,
+      payload: { selected: null },
+    });
+
     router.push({
       pathname: '/',
       query: { ...query, type: state.type },
@@ -211,10 +214,24 @@ const Home: React.FC<HomeProps> = ({ dataListPlaces, dataListWeather }) => {
 
   return (
     <div className={classes.root}>
+      <SEO />
       <Navbar />
       <Container maxWidth="xl">
         <Grid container spacing={3}>
-          {!matches ? (
+          {isDesktop ? (
+            <>
+              <Grid item xs={12} sm={6} md={4}>
+                <div className={classes.listContainer}>
+                  {state.isLoading ? <Loading /> : <ListPlaces />}
+                </div>
+              </Grid>
+              <Grid item xs={12} sm={6} md={8}>
+                <div className={classes.mapContainer}>
+                  <Map />
+                </div>
+              </Grid>
+            </>
+          ) : (
             <>
               <Grid item xs={12} sm={6} md={8}>
                 <div className={classes.mapContainer}>
@@ -222,17 +239,8 @@ const Home: React.FC<HomeProps> = ({ dataListPlaces, dataListWeather }) => {
                 </div>
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
-                {state.isLoading ? <Loading /> : <ListPlaces />}
-              </Grid>
-            </>
-          ) : (
-            <>
-              <Grid item xs={12} sm={6} md={4}>
-                {state.isLoading ? <Loading /> : <ListPlaces />}
-              </Grid>
-              <Grid item xs={12} sm={6} md={8}>
-                <div className={classes.mapContainer}>
-                  <Map />
+                <div className={classes.listContainer}>
+                  {state.isLoading ? <Loading /> : <ListPlaces />}
                 </div>
               </Grid>
             </>

@@ -18,9 +18,6 @@ import theme from '../theme/theme';
 
 import '../styles/globals.css';
 import '../styles/geosearch.css';
-//import 'node_modules/leaflet-geosearch/dist/geosearch.css';
-
-import SEO from '../components/SEO';
 
 import * as gtag from '../lib/gtag';
 
@@ -57,7 +54,6 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
-        <SEO />
       </Head>
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
       <CssBaseline />

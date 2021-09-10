@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Component: React.FC = () => {
   const classes = useStyles();
-  const matches = useMediaQuery('(min-width:600px)');
+  const isDesktop = useMediaQuery('(min-width:600px)');
 
   const { state, dispatch } = useContext(ListPlacesContext);
 
@@ -52,7 +52,7 @@ const Component: React.FC = () => {
 
   return (
     <div className={classes.formContainer}>
-      {matches && (
+      {isDesktop && (
         <Typography variant="h6" align="center" className={classes.label}>
           Type
         </Typography>
@@ -75,7 +75,7 @@ const Component: React.FC = () => {
           <MenuItem value="attractions">Attractions</MenuItem>
         </Select>
       </FormControl>
-      {matches && (
+      {isDesktop && (
         <Typography variant="h6" align="center" className={classes.label}>
           Rating
         </Typography>

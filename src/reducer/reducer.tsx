@@ -24,7 +24,7 @@ type StateType = {
   type: string;
   rating: number;
   popups: {
-    selected?: number;
+    selected: number;
   };
   isLoading: boolean;
 };
