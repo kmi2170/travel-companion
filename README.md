@@ -1,12 +1,12 @@
 # Travel Companion
-An app to find hotls, restaurants and attractions near where you are and anywhere in the world.
+An app to search hotels, restaurants, and attractions around the world.
 
 ## Features and Functions
-- Spots: hotels, restaurants and attractons in the area shown on the map. 
-- By default, a location on the map is identified by your IP address. Also, can search any location you are intrested in,  by location name, or address.  
-- Some more details information is shown in the list on the left panel.
-- Spots are shown by markers on the map, By hovering a cursor over it triggers a popup that shows the minmum information. 
+- Search hotels, restaurants, and attractions in the area shown on the map. 
+- The places found are shown by markers on the map, By hovering a cursor over it triggers a popup that shows some information of the place. 
+- More details information is listed on the left panel.
 - By clinking the datails in popups, the list on the left scrolls to the corresponding place.
+- By default, a location on the map is determined by your IP address. Also, can search any location you are intrested in around the world,   by location name, or address.  
 - Narrow down the list by ratings.
 - Additional infomation: weather icon are showed on the map.
 
