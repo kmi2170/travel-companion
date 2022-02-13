@@ -1,4 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Travel Companion
+An app to find hotls, restaurants and attractions near where you are and anywhere in the world.
+
+## Features and Functions
+- Spots: hotels, restaurants and attractons in the area shown on the map. 
+- By default, a location on the map is identified by your IP address. Also, can search any location you are intrested in,  by location name, or address.  
+- Some more details information is shown in the list on the left panel.
+- Spots are shown by markers on the map, By hovering a cursor over it triggers a popup that shows the minmum information. 
+- By clinking the datails in popups, the list on the left scrolls to the corresponding place.
+- Narrow down the list by ratings.
+- Additional infomation: weather icon are showed on the map.
+
+## Technicals
+
+This project is built with 
+- [Next.js](https://nextjs.org/)
+- TypeScript 
+- [Leaflet.js](https://react-leaflet.js.org/) (for map)
+- [Material-UI](https://mui.com/).
+
+### API Calls
+- [Travel Advisor](https://rapidapi.com/apidojo/api/travel-advisor/) (An app-key required. Freemium.)
+- [OpenWeather API](https://openweathermap.org/api) (for weather icons, an app-key required. There is a free plan.)
 
 ## Getting Started
 
@@ -11,24 +33,3 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
