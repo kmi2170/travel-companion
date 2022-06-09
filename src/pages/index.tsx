@@ -194,17 +194,6 @@ const Home = ({ dataListPlaces, dataListWeather }: HomeProps) => {
     });
   }, [state.type]);
 
-  // const displayLoading = () => <Loading />;
-
-  // const Map: any = useMemo(
-  //   () =>
-  //     // dynamic(() => import('../components/MapReactLeaflet/Map'), {
-  //     dynamic(() => import('../components/MapLeaflet/Map'), {
-  //       loading: () => displayLoading(),
-  //       ssr: false,
-  //     }),
-  //   []
-  // );
 
   const Map = useCustomMap()
 

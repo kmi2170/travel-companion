@@ -1,23 +1,15 @@
-import Image from 'next/image';
-import {
-  Box,
-  Typography,
-  IconButton,
-  Card,
-  CardMedia,
-  CardContent,
-} from '@material-ui/core';
-// import { blue } from '@material-ui/core/colors';
+import Typography from '@material-ui/core/Typography';
+import CardMedia from '@material-ui/core/CardMedia';
 import Rating from '@material-ui/lab/Rating';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   details: {
     '&:hover': { cursor: 'pointer' },
   },
 }));
 
-interface PopupContentProos {
+interface PopupProos {
   index: number;
   name: string;
   photo?: any;
@@ -25,32 +17,23 @@ interface PopupContentProos {
   num_reviews: string;
 }
 
-const PopupContent: React.FC<PopupContentProos> = ({
+const PopupContent = ({
   index,
   name,
   photo,
   rating,
   num_reviews,
-}) => {
+}: PopupProos) => {
   const classes = useStyles();
+  console.log('popup')
 
   return (
     <>
-      {/* 
-      <Image
-        src={photo && photo.images && photo.images.thumbnail.url}
-        height={50}
-        width={50}
-        alt={name}
-      />
-      */}
       <CardMedia
         component="img"
-        image={photo && photo.images && photo.images.thumbnail.url}
-        // height={500}
+        image={photo?.images?.thumbnail.url}
         width={125}
-        // title={name}
-        // alt={name}
+        alt={name}
       />
 
       <Typography variant="h6" gutterBottom>

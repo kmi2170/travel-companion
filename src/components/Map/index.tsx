@@ -4,7 +4,6 @@ import ReactDOMServer from 'react-dom/server';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { LatLng } from 'leaflet-geosearch/dist/providers/provider';
-
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import * as GeoSearch from 'leaflet-geosearch';
 
@@ -13,7 +12,7 @@ import {
   getMapBoundsInit,
   getMapBoundsOnMoveend,
   getMapCenterZoomOnMoveend,
-} from './getMapBounds';
+} from '../../utils/map'
 import PopupContent from './PopupContent';
 import PopupContentWeather from './PopupContentWeather';
 

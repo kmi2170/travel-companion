@@ -1,7 +1,8 @@
+
 export const getMapBoundsInit = (
   mapRef: any,
   actionTypes: string,
-  dispatch: ({}) => void
+  dispatch: ({ }) => void
 ) => {
   const ne = mapRef?.current.getBounds().getNorthEast();
   const sw = mapRef?.current.getBounds().getSouthWest();
@@ -17,7 +18,7 @@ let bounds = [];
 export const getMapBoundsOnMoveend = async (
   e: any,
   actionTypes: string,
-  dispatch: ({}) => void
+  dispatch: ({ }) => void
 ) => {
   const ne = e.target.getBounds().getNorthEast();
   const sw = e.target.getBounds().getSouthWest();
@@ -44,7 +45,7 @@ let zooms = [];
 export const getMapCenterZoomOnMoveend = async (
   e: any,
   actionTypes: string,
-  dispatch: ({}) => void
+  dispatch: ({ }) => void
 ) => {
   const center = e.getCenter();
   const zoom = e.getZoom();
