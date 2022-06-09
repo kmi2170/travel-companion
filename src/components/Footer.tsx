@@ -1,8 +1,9 @@
-import { Grid, Typography } from '@material-ui/core';
+import { memo } from 'react';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 const Footer = () => {
-  const dt = new Date();
-  const year = dt.getFullYear();
+  const year = new Date().getFullYear();
 
   return (
     <footer>
@@ -17,4 +18,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);
