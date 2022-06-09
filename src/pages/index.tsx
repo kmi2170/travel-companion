@@ -18,6 +18,7 @@ import ListPlaces from '../components/ListPlaces/ListPlaces';
 import Footer from '../components/Footer';
 import { useCustomeCookies } from '../hooks/useCustomCookies';
 import { useCustomContext } from '../context/hook';
+import { useCustomMap } from '../hooks/useCustomMap';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -193,17 +194,19 @@ const Home = ({ dataListPlaces, dataListWeather }: HomeProps) => {
     });
   }, [state.type]);
 
-  const displayLoading = () => <Loading />;
+  // const displayLoading = () => <Loading />;
 
-  const Map: any = useMemo(
-    () =>
-      // dynamic(() => import('../components/MapReactLeaflet/Map'), {
-      dynamic(() => import('../components/MapLeaflet/Map'), {
-        loading: () => displayLoading(),
-        ssr: false,
-      }),
-    []
-  );
+  // const Map: any = useMemo(
+  //   () =>
+  //     // dynamic(() => import('../components/MapReactLeaflet/Map'), {
+  //     dynamic(() => import('../components/MapLeaflet/Map'), {
+  //       loading: () => displayLoading(),
+  //       ssr: false,
+  //     }),
+  //   []
+  // );
+
+  const Map = useCustomMap()
 
   return (
     <div className={classes.root}>
