@@ -2,26 +2,17 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-
-import { CookiesProvider } from 'react-cookie';
-
-// import { QueryClientProvider } from 'react-query';
-// import { Hydrate } from 'react-query/hydration';
-// import queryClient from '../utils/reactQuery';
-// import { ReactQueryDevtools } from 'react-query/devtools';
-
-import ListRestaurantsContextProvider from '../reducer/reducer';
-
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import theme from '../theme/theme';
+import { CookiesProvider } from 'react-cookie';
 
-import '../styles/globals.css';
-import '../styles/geosearch.css';
+import SEO from '../components/SEO';
+import ListRestaurantsContextProvider from '../reducer/reducer';
 
 import * as gtag from '../lib/gtag';
-
-// const queryClient = new QueryClient();
+import theme from '../theme/theme';
+import '../styles/globals.css';
+import '../styles/geosearch.css';
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   useEffect(() => {
@@ -33,27 +24,29 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   }, []);
 
   const router = useRouter();
-  useEffect(() => {
-    const handleRouteChange = (url) => {
-      gtag.pageview(url);
-    };
+  useEffect(
+    () => {
+      const handleRouteChange = url => {
+        gtag.pageview(url);
+      };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
+      router.events.on('routeChangeComplete', handleRouteChange);
 
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router.events]);
+      return () => {
+        router.events.off('routeChangeComplete', handleRouteChange);
+      };
+    },
+    [router.events]
+  );
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}> */}
       <Head>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
+        <SEO />
       </Head>
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
       <CssBaseline />
@@ -62,9 +55,6 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
           <Component {...pageProps} />
         </ListRestaurantsContextProvider>
       </CookiesProvider>
-      {/* <ReactQueryDevtools />
-        </Hydrate>
-      </QueryClientProvider> */}
     </ThemeProvider>
   );
 };

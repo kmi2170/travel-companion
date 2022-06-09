@@ -15,10 +15,10 @@ import { fetchOpenWeatherCurrentByBounds } from '../api/lib/open_weather';
 import { ipLookup } from '../api/lib/ipLookup';
 
 import Loading from '../components/Loading';
-import SEO from '../components/SEO';
 import Navbar from '../components/Navbar/Navbar';
 import ListPlaces from '../components/ListPlaces/ListPlaces';
 import Footer from '../components/Footer';
+import { useCustomeCookies } from '../hooks/useCustomCookies';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -43,28 +43,24 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const cookiesOptions = {
-  path: '/',
-  maxAge: 2600000,
-  sameSite: true,
-};
 
 interface HomeProps {
   dataListPlaces: [] | null;
   dataListWeather: {} | null;
 }
 
-const Home: React.FC<HomeProps> = ({ dataListPlaces, dataListWeather }) => {
+const Home = ({ dataListPlaces, dataListWeather }: HomeProps) => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
   const { state, dispatch } = useContext(ListPlacesContext);
   const { query } = useRouter();
-  const [cookies, setCookie] = useCookies(['mylocation']);
+
+  const { cookies, setLocationCookie } = useCustomeCookies()
 
   useEffect(() => {
-    if (cookies.mylocation) {
-      const [lat, lng] = cookies.mylocation;
+    if (cookies.travel_location) {
+      const [lat, lng] = cookies.travel_location;
 
       dispatch({
         type: actionTypes.SET_INIT_COORDS,
@@ -88,10 +84,8 @@ const Home: React.FC<HomeProps> = ({ dataListPlaces, dataListWeather }) => {
 
   useEffect(() => {
     if (state.coords.lat && state.coords.lng) {
-      setCookie(
-        'mylocation',
+      setLocationCookie(
         JSON.stringify([state.coords.lat, state.coords.lng]),
-        cookiesOptions
       );
     }
   }, [state.coords]);
@@ -125,8 +119,8 @@ const Home: React.FC<HomeProps> = ({ dataListPlaces, dataListWeather }) => {
       const filterdListPlaces = state.rating
         ? []
         : dataListPlacesValidated.filter(
-            ({ rating }) => rating >= state.rating
-          );
+          ({ rating }) => rating >= state.rating
+        );
 
       dispatch({
         type: actionTypes.SET_LIST_PLACES,
@@ -214,7 +208,6 @@ const Home: React.FC<HomeProps> = ({ dataListPlaces, dataListWeather }) => {
 
   return (
     <div className={classes.root}>
-      <SEO />
       <Navbar />
       <Container maxWidth="xl">
         <Grid container spacing={3}>
@@ -262,12 +255,12 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const dataListPlaces =
     neLat && neLng && swLat && swLng
       ? await fetchPlacesByBounds(
-          type as string,
-          neLat as string,
-          neLng as string,
-          swLat as string,
-          swLng as string
-        )
+        type as string,
+        neLat as string,
+        neLng as string,
+        swLat as string,
+        swLng as string
+      )
       : null;
 
   const diffLat = Math.abs(+neLat - +swLat);
@@ -278,12 +271,12 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const dataListWeather =
     neLat && neLng && swLat && swLng && diffLat < 25.0 && diffLng < 25.0
       ? await fetchOpenWeatherCurrentByBounds(
-          neLat as string,
-          neLng as string,
-          swLat as string,
-          swLng as string
-          // zoom as string
-        )
+        neLat as string,
+        neLng as string,
+        swLat as string,
+        swLng as string
+        // zoom as string
+      )
       : null;
 
   return { props: { dataListPlaces, dataListWeather } };
