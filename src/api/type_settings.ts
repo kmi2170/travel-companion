@@ -1,6 +1,6 @@
-export type CoordsType = { lat: number; lng: number };
+export type Coords = { lat: number; lng: number };
 
-export type BoundsType = {
+export type Bounds = {
   ne: { lat: number; lng: number };
   sw: { lat: number; lng: number };
 };

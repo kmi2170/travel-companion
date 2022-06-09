@@ -1,4 +1,4 @@
-import { BoundsType, CoordsType } from '../api/type_settings';
+import { Bounds, Coords } from '../api/type_settings';
 
 export const initialState = {
   init_coords: { lat: null, lng: null },
@@ -13,10 +13,10 @@ export const initialState = {
   isLoading: false,
 };
 
-export type StateType = {
-  init_coords: CoordsType;
-  coords: CoordsType;
-  bounds: BoundsType;
+export type State = {
+  init_coords: Coords;
+  coords: Coords;
+  bounds: Bounds;
   list_places: [] | null;
   filtered_list_places: [] | null;
   list_weather: [] | null;

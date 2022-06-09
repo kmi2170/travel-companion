@@ -1,7 +1,7 @@
-import { StateType } from './state';
+import { State } from './state';
 import { actionTypes, ActionsType } from './actions';
 
-export const reducer = (state: StateType, action: ActionsType) => {
+export const reducer = (state: State, action: ActionsType) => {
   switch (action.type) {
     case actionTypes.SET_INIT_COORDS:
       return { ...state, init_coords: action.payload };

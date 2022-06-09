@@ -1,4 +1,4 @@
-import { BoundsType, CoordsType } from "../api/type_settings";
+import { Bounds, Coords } from "../api/type_settings";
 
 
 export enum actionTypes {
@@ -14,10 +14,10 @@ export enum actionTypes {
   SET_IS_LOADING = 'SET_IS_LOADING',
 }
 
-type PayloadType = {
-  [actionTypes.SET_INIT_COORDS]: CoordsType;
-  [actionTypes.SET_COORDS]: CoordsType;
-  [actionTypes.SET_BOUNDS]: BoundsType;
+type Payload = {
+  [actionTypes.SET_INIT_COORDS]: Coords;
+  [actionTypes.SET_COORDS]: Coords;
+  [actionTypes.SET_BOUNDS]: Bounds;
   [actionTypes.SET_LIST_PLACES]: [] | null;
   [actionTypes.SET_FILTERED_LIST_PLACES]: [] | null;
   [actionTypes.SET_LIST_WEATHER]: [] | null;
@@ -33,4 +33,4 @@ type ActionMap<M extends { [index: string]: any }> = {
   : { type: Key; payload: M[Key] };
 };
 
-export type ActionsType = ActionMap<PayloadType>[keyof ActionMap<PayloadType>];
+export type ActionsType = ActionMap<Payload>[keyof ActionMap<Payload>];
