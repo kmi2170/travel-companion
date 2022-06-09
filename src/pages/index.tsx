@@ -4,12 +4,11 @@ import dynamic from 'next/dynamic';
 import router, { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 
-import { useCookies } from 'react-cookie';
-
 import { Container, Grid, useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListPlacesContext, actionTypes } from '../reducer/reducer';
+import { ListPlacesContext } from '../context'
+import { actionTypes } from '../context/actions'
 import { fetchPlacesByBounds } from '../api/lib/travel_advisor';
 import { fetchOpenWeatherCurrentByBounds } from '../api/lib/open_weather';
 import { ipLookup } from '../api/lib/ipLookup';

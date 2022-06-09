@@ -7,7 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { CookiesProvider } from 'react-cookie';
 
 import SEO from '../components/SEO';
-import ListRestaurantsContextProvider from '../reducer/reducer';
+import ListRestaurantsContextProvider from '../context';
 
 import * as gtag from '../lib/gtag';
 import theme from '../theme/theme';

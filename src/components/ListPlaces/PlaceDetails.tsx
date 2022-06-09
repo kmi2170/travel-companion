@@ -18,7 +18,7 @@ import {
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListPlacesContext } from '../../reducer/reducer';
+import { ListPlacesContext } from '../../context'
 
 const useStyles = makeStyles((theme: Theme) => ({
   chip: {

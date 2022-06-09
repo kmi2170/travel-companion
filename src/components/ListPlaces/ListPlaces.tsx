@@ -3,7 +3,7 @@ import { useState, useEffect, useContext, useRef, createRef } from 'react';
 import { Grid, useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListPlacesContext } from '../../reducer/reducer';
+import { ListPlacesContext } from '../../context';
 import PlaceDetails from './PlaceDetails';
 import FloatingButton from '../FloatingButton';
 // import Preview from '../Preview';
@@ -63,7 +63,7 @@ const ListPlaces: React.FC = () => {
               index={i}
               place={place}
               ref={popupRefs}
-              // ref={elRefs[i]}
+            // ref={elRefs[i]}
             />
           </Grid>
         ))}

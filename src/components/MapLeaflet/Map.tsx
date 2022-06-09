@@ -8,7 +8,8 @@ import { LatLng } from 'leaflet-geosearch/dist/providers/provider';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import * as GeoSearch from 'leaflet-geosearch';
 
-import { ListPlacesContext, actionTypes } from '../../reducer/reducer';
+import { ListPlacesContext, } from '../../context'
+import { actionTypes } from '../../context/actions'
 import {
   getMapBoundsInit,
   getMapBoundsOnMoveend,
@@ -120,7 +121,7 @@ const Map: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    mapRef.current.eachLayer(function (layer) {
+    mapRef.current.eachLayer(function(layer) {
       if (layer.options.pane === 'markerPane') {
         layer.removeFrom(mapRef.current);
         console.log('removeMarker');

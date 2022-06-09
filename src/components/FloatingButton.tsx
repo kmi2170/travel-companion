@@ -5,7 +5,7 @@ import { Navigation as NavigationIcon } from '@material-ui/icons';
 
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListPlacesContext } from '../reducer/reducer';
+import { ListPlacesContext } from '../context';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

@@ -11,7 +11,8 @@ import {
 import { blue } from '@material-ui/core/colors';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListPlacesContext, actionTypes } from '../../reducer/reducer';
+import { ListPlacesContext } from '../../context';
+import { actionTypes } from '../../context/actions';
 
 const useStyles = makeStyles((theme: Theme) => ({
   formContainer: {
