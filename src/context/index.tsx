@@ -1,18 +1,26 @@
 import { createContext, useReducer, useMemo } from 'react';
-// import { CoordsType, BoundsType } from '../api/type_settings';
 import { reducer } from './reducer';
 import { initialState, State } from './state';
 import { ActionsType } from './actions';
 
-export const ListPlacesContext = createContext<{
+export interface ListPlacesContextProps {
   state: State;
   dispatch: React.Dispatch<ActionsType>;
-}>({ state: initialState, dispatch: () => null });
+}
 
-const ListPlacesContextProvider: React.FC<React.ReactNode> = ({ children }) => {
+export const ListPlacesContext = createContext<ListPlacesContextProps>({
+  state: initialState,
+  dispatch: () => undefined,
+});
+
+const ListPlacesContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const contextValue = useMemo(
+  const value = useMemo(
     () => {
       return { state, dispatch };
     },
@@ -20,7 +28,7 @@ const ListPlacesContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   );
 
   return (
-    <ListPlacesContext.Provider value={contextValue}>
+    <ListPlacesContext.Provider value={value}>
       {children}
     </ListPlacesContext.Provider>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ReactDOMServer from 'react-dom/server';
 
 import L from 'leaflet';
@@ -8,7 +8,6 @@ import { LatLng } from 'leaflet-geosearch/dist/providers/provider';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import * as GeoSearch from 'leaflet-geosearch';
 
-import { ListPlacesContext, } from '../../context'
 import { actionTypes } from '../../context/actions'
 import {
   getMapBoundsInit,
@@ -19,6 +18,7 @@ import PopupContent from './PopupContent';
 import PopupContentWeather from './PopupContentWeather';
 
 import styles from './Map.module.css';
+import { useCustomContext } from '../../context/hook';
 
 const attribution =
   '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
@@ -77,7 +77,7 @@ const contentWeather = (description: string, temp: number) =>
   )}</div>`;
 
 const Map: React.FC = () => {
-  const { state, dispatch } = useContext(ListPlacesContext);
+  const { state, dispatch } = useCustomContext()
 
   const [isMarkerText, setIsMarkerText] = useState<Boolean>(
     initZoom > zoomWithMarkerText ? true : false

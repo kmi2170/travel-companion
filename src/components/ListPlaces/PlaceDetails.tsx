@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, forwardRef } from 'react';
+import { forwardRef } from 'react';
 import Image from 'next/image';
 
 import {
@@ -18,7 +18,7 @@ import {
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListPlacesContext } from '../../context'
+import { useCustomContext } from '../../context/hook';
 
 const useStyles = makeStyles((theme: Theme) => ({
   chip: {
@@ -47,7 +47,7 @@ const PlaceDetails = (
 ) => {
   //const PlaceDetails: React.FC<any> = ({ place }, ref: React.MutableRefObject<HTMLDivElement>)) => {
   const classes = useStyles();
-  const { state } = useContext(ListPlacesContext);
+  const { state } = useCustomContext();
 
   if (state.popups.selected === index) {
     ref?.current[index].scrollIntoView();

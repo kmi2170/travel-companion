@@ -1,11 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
-
 import { Typography, Fab } from '@material-ui/core';
 import { Navigation as NavigationIcon } from '@material-ui/icons';
-
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListPlacesContext } from '../context';
+import { useCustomContext } from '../context/hook';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -26,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Component: React.FC = () => {
   const classes = useStyles();
-  const { state, dispatch } = useContext(ListPlacesContext);
+  const { state, dispatch } = useCustomContext();
 
   const handleClick = () => {
     window.scrollTo(0, 0);

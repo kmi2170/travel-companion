@@ -1,12 +1,11 @@
-import { useState, useEffect, useContext, useRef, createRef } from 'react';
+import { useRef } from 'react';
 
 import { Grid, useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListPlacesContext } from '../../context';
 import PlaceDetails from './PlaceDetails';
 import FloatingButton from '../FloatingButton';
-// import Preview from '../Preview';
+import { useCustomContext } from '../../context/hook';
 
 const useStyles = makeStyles((theme: Theme) => ({
   text: {},
@@ -20,7 +19,7 @@ const ListPlaces: React.FC = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { state } = useContext(ListPlacesContext);
+  const { state } = useCustomContext();
 
   // const [elRefs, setElRefs] = useState([]);
   // useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useContext, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import dynamic from 'next/dynamic';
 import router, { useRouter } from 'next/router';
@@ -7,7 +7,6 @@ import { GetServerSideProps } from 'next';
 import { Container, Grid, useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListPlacesContext } from '../context'
 import { actionTypes } from '../context/actions'
 import { fetchPlacesByBounds } from '../api/lib/travel_advisor';
 import { fetchOpenWeatherCurrentByBounds } from '../api/lib/open_weather';
@@ -18,6 +17,7 @@ import Navbar from '../components/Navbar/Navbar';
 import ListPlaces from '../components/ListPlaces/ListPlaces';
 import Footer from '../components/Footer';
 import { useCustomeCookies } from '../hooks/useCustomCookies';
+import { useCustomContext } from '../context/hook';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -52,7 +52,7 @@ const Home = ({ dataListPlaces, dataListWeather }: HomeProps) => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { state, dispatch } = useContext(ListPlacesContext);
+  const { state, dispatch } = useCustomContext();
   const { query } = useRouter();
 
   const { cookies, setLocationCookie } = useCustomeCookies()

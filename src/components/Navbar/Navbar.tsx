@@ -1,9 +1,6 @@
-// import { useState, useEffect, useContext } from 'react';
-
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-// import { ListPlacesContext } from '../../reducer/reducer';
 import Form from './Form';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -21,7 +18,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Navbar: React.FC = () => {
   const classes = useStyles();
-  // const { state, dispatch } = useContext(ListPlacesContext);
 
   return (
     <AppBar position="sticky">

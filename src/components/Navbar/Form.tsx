@@ -1,5 +1,3 @@
-import { useState, useEffect, useContext } from 'react';
-
 import {
   Typography,
   FormControl,
@@ -11,8 +9,8 @@ import {
 import { blue } from '@material-ui/core/colors';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ListPlacesContext } from '../../context';
 import { actionTypes } from '../../context/actions';
+import { useCustomContext } from '../../context/hook';
 
 const useStyles = makeStyles((theme: Theme) => ({
   formContainer: {
@@ -41,7 +39,7 @@ const Component: React.FC = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { state, dispatch } = useContext(ListPlacesContext);
+  const { state, dispatch } = useCustomContext();
 
   const handeleSetType = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({ type: actionTypes.SET_TYPE, payload: e.target.value });
