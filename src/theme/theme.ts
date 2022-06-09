@@ -30,22 +30,7 @@ let theme = createTheme({
     },
   },
   typography: {
-    fontFamily: [
-      'Roboto',
-      'Lobster',
-      'Raleway',
-      'sans-serif',
-      // 'Roboto Condensed',
-      'Rubik',
-      'Oswald',
-      'Viaoda Libre',
-    ].join(','),
-    // h4: {
-    //   fontSize: '2.125rem',
-    //   [breakpoints.down('sm')]: {
-    //     fontSize: '1.5rem',
-    //   },
-    // },
+    fontFamily: ['Roboto', 'sans-serif'].join(','),
   },
   overrides: {},
 });

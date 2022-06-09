@@ -25,22 +25,6 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
             rel="stylesheet"
           />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Oswald&family=Roboto+Condensed&display=swap"
-            rel="stylesheet"
-          />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
-            rel="stylesheet"
-          />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Raleway&display=swap"
-            rel="stylesheet"
-          />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Viaoda+Libre&display=swap"
-            rel="stylesheet"
-          />
 
           {/* We only want to add the scripts if in production */}
           {this.isProduction && (
@@ -108,7 +92,7 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   ctx.renderPage = () =>
     originalRenderPage({
       // eslint-disable-next-line react/display-name
-      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+      enhanceApp: App => props => sheets.collect(<App {...props} />),
     });
 
   const initialProps = await Document.getInitialProps(ctx);
