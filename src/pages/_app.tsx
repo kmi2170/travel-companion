@@ -14,7 +14,7 @@ import theme from '../theme/theme';
 import '../styles/globals.css';
 import '../styles/geosearch.css';
 
-const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');

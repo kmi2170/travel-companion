@@ -20,7 +20,7 @@ const PopupWeather = ({ description, temp }: PopupWeatherProps) => {
         {description}
       </Typography>
       <Typography variant="h6" align="center" className={classes.textTemp}>
-        {formatNumber(temp)}&#8457; ({Math.round((temp - 32) * 0.55)}&#8451;)
+        {Math.round(temp)}&#8457; ({Math.round((temp - 32) * 0.55)}&#8451;)
       </Typography>
     </>
   );

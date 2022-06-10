@@ -1,10 +1,10 @@
-import { useEffect, useMemo } from 'react';
-
-import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
 import router, { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 
-import { Container, Grid, useMediaQuery } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import { useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { actionTypes } from '../context/actions'
@@ -55,6 +55,7 @@ const Home = ({ dataListPlaces, dataListWeather }: HomeProps) => {
 
   const { state, dispatch } = useCustomContext();
   const { query } = useRouter();
+  console.log('query', query)
 
   const { cookies, setLocationCookie } = useCustomeCookies()
 
@@ -85,7 +86,7 @@ const Home = ({ dataListPlaces, dataListWeather }: HomeProps) => {
   useEffect(() => {
     if (state.coords.lat && state.coords.lng) {
       setLocationCookie(
-        JSON.stringify([state.coords.lat, state.coords.lng]),
+        [state.coords.lat, state.coords.lng]
       );
     }
   }, [state.coords]);
