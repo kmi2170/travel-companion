@@ -14,7 +14,7 @@ import {
   getMapCenterZoomOnMoveend,
 } from '../../utils/map'
 import PopupContent from './PopupContent';
-import PopupContentWeather from './PopupContentWeather';
+import PopupWeather from './PopupWeather';
 
 import styles from './Map.module.css';
 import { useCustomContext } from '../../context/hook';
@@ -72,10 +72,10 @@ const content = (
 
 const contentWeather = (description: string, temp: number) =>
   `<div>${ReactDOMServer.renderToString(
-    <PopupContentWeather description={description} temp={temp} />
+    <PopupWeather description={description} temp={temp} />
   )}</div>`;
 
-const Map: React.FC = () => {
+const Map = () => {
   const { state, dispatch } = useCustomContext()
 
   const [isMarkerText, setIsMarkerText] = useState<Boolean>(

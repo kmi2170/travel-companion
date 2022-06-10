@@ -25,7 +25,6 @@ const PopupContent = ({
   num_reviews,
 }: PopupProos) => {
   const classes = useStyles();
-  console.log('popup')
 
   return (
     <>
