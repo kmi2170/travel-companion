@@ -8,8 +8,8 @@ import { useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { actionTypes } from '../context/actions'
-import { fetchPlacesByBounds } from '../api/lib/travel_advisor';
-import { fetchOpenWeatherCurrentByBounds } from '../api/lib/open_weather';
+import { fetchLocationsByBounds } from '../api/lib/travel_advisor';
+import { fetchCurrentWeatherByBounds } from '../api/lib/open_weather';
 import { ipLookup } from '../api/lib/ipLookup';
 
 import Loading from '../components/Loading';
@@ -246,7 +246,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   const dataListPlaces =
     neLat && neLng && swLat && swLng
-      ? await fetchPlacesByBounds(
+      ? await fetchLocationsByBounds(
         type as string,
         neLat as string,
         neLng as string,
@@ -262,12 +262,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   // const dataWeather = null;
   const dataListWeather =
     neLat && neLng && swLat && swLng && diffLat < 25.0 && diffLng < 25.0
-      ? await fetchOpenWeatherCurrentByBounds(
+      ? await fetchCurrentWeatherByBounds(
         neLat as string,
         neLng as string,
         swLat as string,
         swLng as string
-        // zoom as string
       )
       : null;
 
