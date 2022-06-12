@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { Grid, useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -15,11 +15,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const ListPlaces: React.FC = () => {
+const ListPlaces = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { state } = useCustomContext();
+  const { state: { filtered_list_places }
+  } = useCustomContext();
 
   // const [elRefs, setElRefs] = useState([]);
   // useEffect(() => {
@@ -30,15 +31,19 @@ const ListPlaces: React.FC = () => {
   //   );
   // }, [state.list_places]);
 
-  const popupRefs = useRef(new Array(state.list_places?.length));
+  const popupRefs = useRef(new Array(filtered_list_places?.length));
 
   const setRefs = (ref: HTMLElement, index: number) => {
     popupRefs.current[index] = ref;
   };
 
-  const list = state.filtered_list_places?.length
-    ? state.filtered_list_places
-    : state.list_places;
+  // const list = useMemo(
+  //   () => {
+  //     return filtered_list_places?.length ? filtered_list_places : list_places
+  //   }, [filtered_list_places])
+  // console.log('list')
+  // console.log(filtered_list_places)
+
 
   return (
     <div>
@@ -49,7 +54,7 @@ const ListPlaces: React.FC = () => {
     */}
       <Grid container spacing={2} className={classes.list}>
         {!isDesktop && <FloatingButton />}
-        {list?.map((place, i) => (
+        {filtered_list_places?.map((place, i) => (
           <Grid
             id={`place${i}`}
             ref={(ref) => setRefs(ref, i)}
@@ -67,11 +72,6 @@ const ListPlaces: React.FC = () => {
           </Grid>
         ))}
       </Grid>
-
-      {/* 
-      <Preview data={state.bounds} />
-      <Preview data={state.list_places} />
-      */}
     </div>
   );
 };

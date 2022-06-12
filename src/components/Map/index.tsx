@@ -78,6 +78,7 @@ const contentWeather = (description: string, temp: number) =>
 const Map = () => {
   const { state, dispatch } = useCustomContext()
 
+  console.log(state)
   const [isMarkerText, setIsMarkerText] = useState<Boolean>(
     initZoom > zoomWithMarkerText ? true : false
   );
