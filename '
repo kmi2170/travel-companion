@@ -98,10 +98,10 @@ const Home = ({ dataListPlaces, dataListWeather }: HomeProps) => {
         pathname: '/',
         query: {
           type: state.type,
-          NE_Lat: state.bounds.ne.lat,
-          NE_Lng: state.bounds.ne.lng,
-          SW_Lat: state.bounds.sw.lat,
-          SW_Lng: state.bounds.sw.lng,
+          neLat: state.bounds.ne.lat,
+          neLng: state.bounds.ne.lng,
+          swLat: state.bounds.sw.lat,
+          swLng: state.bounds.sw.lng,
         },
       });
     }
@@ -244,17 +244,20 @@ export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { type, NE_Lat, NE_Lng, SW_Lat, SW_Lng } = query;
-  console.log(query)
+
   const baseArgs = { NE_Lat, NE_Lng, SW_Lat, SW_Lng } as Omit<BoundsAPI, 'type'>
 
   const dataListPlaces =
     NE_Lat && NE_Lng && SW_Lat && SW_Lng
-      ? await fetchLocationsByBounds({ type, ...baseArgs } as BoundsAPI)
+      ? await fetchLocationsByBounds(
+        { type, ...baseArgs } as BoundsAPI)
       : null;
 
   const diffLat = Math.abs(+NE_Lat - +SW_Lat);
   const diffLng = Math.abs(+NE_Lng - +SW_Lng);
+  // console.log(diffLat, diffLng);
 
+  // const dataWeather = null;
   const dataListWeather =
     NE_Lat && NE_Lng && SW_Lat && SW_Lng && diffLat < 25.0 && diffLng < 25.0
       ? await fetchCurrentWeatherByBounds(baseArgs)
