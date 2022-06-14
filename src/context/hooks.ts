@@ -6,8 +6,7 @@ import {
 } from './index';
 import { initialState, State } from './state';
 import { reducer } from './reducer';
-import { actionTypes } from './actions';
-import { Coords, Bounds } from '../api/type_settings';
+import { actionTypes, ActionType } from './actions';
 
 export const useTravelContext = () => {
   return useContext<State>(TravelContext);
@@ -17,62 +16,42 @@ export const useTravelDispatchContext = () => {
   return useContext<TravelDispatchContextType>(TravelDispatchContext);
 };
 
+type Payload<T> = Extract<ActionType, { type: T }>['payload'];
+
 export const useTravelForContext = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setIsLoading = (isLoading: boolean) => {
-    return dispatch({
-      type: actionTypes.SET_IS_LOADING,
-      payload: isLoading,
-    });
+  const setIsLoading = (payload: Payload<'SET_IS_LOADING'>) => {
+    return dispatch({ type: actionTypes.SET_IS_LOADING, payload });
   };
-  const setInitCoords = (lat_lng: Coords) => {
-    return dispatch({
-      type: actionTypes.SET_INIT_COORDS,
-      payload: lat_lng,
-    });
+  const setInitCoords = (payload: Payload<'SET_INIT_COORDS'>) => {
+    return dispatch({ type: actionTypes.SET_INIT_COORDS, payload });
   };
-  const setCoords = (lat_lng: Coords) => {
-    return dispatch({
-      type: actionTypes.SET_COORDS,
-      payload: lat_lng,
-    });
+  const setCoords = (payload: Payload<'SET_COORDS'>) => {
+    return dispatch({ type: actionTypes.SET_COORDS, payload });
   };
-  const setBounds = (bounds: Bounds) => {
-    return dispatch({
-      type: actionTypes.SET_BOUNDS,
-      payload: bounds,
-    });
+  const setBounds = (payload: Payload<'SET_BOUNDS'>) => {
+    return dispatch({ type: actionTypes.SET_BOUNDS, payload });
   };
-  const setFilteredSitesList = (sites: [] | null) => {
-    return dispatch({
-      type: actionTypes.SET_FILTERED_LIST_PLACES,
-      payload: sites,
-    });
+  const setFilteredSitesList = (
+    payload: Payload<'SET_FILTERED_LIST_PLACES'>
+  ) => {
+    return dispatch({ type: actionTypes.SET_FILTERED_LIST_PLACES, payload });
   };
-  const setSitesList = (sites: [] | null) => {
-    return dispatch({
-      type: actionTypes.SET_LIST_PLACES,
-      payload: sites,
-    });
+  const setSitesList = (payload: Payload<'SET_LIST_PLACES'>) => {
+    return dispatch({ type: actionTypes.SET_LIST_PLACES, payload });
   };
-  const setType = (type: string) => {
-    return dispatch({
-      type: actionTypes.SET_TYPE,
-      payload: type,
-    });
+  const setWeatherList = (payload: Payload<'SET_LIST_WEATHER'>) => {
+    return dispatch({ type: actionTypes.SET_LIST_WEATHER, payload });
   };
-  const setRating = (rating: number) => {
-    return dispatch({
-      type: actionTypes.SET_RATING,
-      payload: rating,
-    });
+  const setType = (payload: Payload<'SET_TYPE'>) => {
+    return dispatch({ type: actionTypes.SET_TYPE, payload });
   };
-  const setSelectedPopup = (selected: number) => {
-    return dispatch({
-      type: actionTypes.SET_POPUP_SELECTED,
-      payload: { selected },
-    });
+  const setRating = (payload: Payload<'SET_RATING'>) => {
+    return dispatch({ type: actionTypes.SET_RATING, payload });
+  };
+  const setSelectedPopup = (payload: Payload<'SET_POPUP_SELECTED'>) => {
+    return dispatch({ type: actionTypes.SET_POPUP_SELECTED, payload });
   };
 
   return {
@@ -83,6 +62,7 @@ export const useTravelForContext = () => {
     setBounds,
     setFilteredSitesList,
     setSitesList,
+    setWeatherList,
     setType,
     setRating,
     setSelectedPopup,
