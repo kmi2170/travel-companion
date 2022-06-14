@@ -44,9 +44,15 @@ export const useTravelForContext = () => {
       payload: bounds,
     });
   };
-  const setFilteredSites = (sites: [] | null) => {
+  const setFilteredSitesList = (sites: [] | null) => {
     return dispatch({
       type: actionTypes.SET_FILTERED_LIST_PLACES,
+      payload: sites,
+    });
+  };
+  const setSitesList = (sites: [] | null) => {
+    return dispatch({
+      type: actionTypes.SET_LIST_PLACES,
       payload: sites,
     });
   };
@@ -75,7 +81,8 @@ export const useTravelForContext = () => {
     setInitCoords,
     setCoords,
     setBounds,
-    setFilteredSites,
+    setFilteredSitesList,
+    setSitesList,
     setType,
     setRating,
     setSelectedPopup,

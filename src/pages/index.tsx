@@ -53,11 +53,19 @@ const Home = (dataListWeather: HomeProps) => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { coords, bounds, type, isLoading } = useTravelContext();
+  const {
+    list_places,
+    coords,
+    bounds,
+    type,
+    rating,
+    isLoading,
+  } = useTravelContext();
   const {
     setIsLoading,
     setInitCoords,
-    setFilteredSites,
+    setSitesList,
+    setFilteredSitesList,
   } = useTravelDispatchContext();
   // const { query } = useRouter();
   const { cookies, setLocationCookie } = useCustomeCookies();
@@ -107,10 +115,6 @@ const Home = (dataListWeather: HomeProps) => {
   // );
 
   // useEffect(() => {
-  //   dispatch({
-  //     type: actionTypes.SET_IS_LOADING,
-  //     payload: true,
-  //   });
 
   //   if (dataListPlaces && dataListPlaces.length) {
   // const dataListPlacesValidated = dataListPlaces.filter(({ name }) =>
@@ -132,12 +136,6 @@ const Home = (dataListWeather: HomeProps) => {
   //   type: actionTypes.SET_FILTERED_LIST_PLACES,
   //   payload: filterdListPlaces as [] | null,
   // });
-
-  // dispatch({
-  //   type: actionTypes.SET_IS_LOADING,
-  //   payload: false,
-  // });
-  //   }
   // }, [dataListPlaces]);
 
   // useEffect(() => {
@@ -153,10 +151,6 @@ const Home = (dataListWeather: HomeProps) => {
   // }, [dataListWeather]);
 
   // useEffect(() => {
-  //   dispatch({
-  //     type: actionTypes.SET_IS_LOADING,
-  //     payload: true,
-  //   });
 
   //   const filterdListPlaces = state.list_places?.filter(
   //     ({ rating }) => rating >= state.rating
@@ -166,11 +160,6 @@ const Home = (dataListWeather: HomeProps) => {
   //   type: actionTypes.SET_FILTERED_LIST_PLACES,
   //   payload: filterdListPlaces as [],
   // });
-
-  //   dispatch({
-  //     type: actionTypes.SET_IS_LOADING,
-  //     payload: false,
-  //   });
   // }, [state.rating]);
 
   // useEffect(
@@ -195,31 +184,35 @@ const Home = (dataListWeather: HomeProps) => {
   //   [state.type]
   // );
 
-  useEffect(
-    () => {
-      if (bounds.ne.lat && bounds.ne.lng && bounds.sw.lat && bounds.sw.lng) {
-        setIsLoading(true);
+  useEffect(() => {
+    if (bounds.ne.lat && bounds.ne.lng && bounds.sw.lat && bounds.sw.lng) {
+      setIsLoading(true);
+      (async () => {
+        const params = {
+          type: type,
+          NE_Lat: bounds.ne.lat,
+          NE_Lng: bounds.ne.lng,
+          SW_Lat: bounds.sw.lat,
+          SW_Lng: bounds.sw.lng,
+        };
+        const { data } = await axios('/api/locations', { params });
+        const filteredData = data?.filter(({ name }) => Boolean(name))
+          .filter(({ rating: value }) => value >= rating);
+        // console.log(filteredData);
+        setSitesList(data);
+        setFilteredSitesList(filteredData);
+      })();
+      setIsLoading(false);
+    }
+  }, [bounds, type]);
 
-        (async () => {
-          const params = {
-            type: type,
-            NE_Lat: bounds.ne.lat,
-            NE_Lng: bounds.ne.lng,
-            SW_Lat: bounds.sw.lat,
-            SW_Lng: bounds.sw.lng,
-          };
-          const { data } = await axios('/api/locations', { params });
-          const filteredData = data.filter(({ name }) => Boolean(name));
-          // console.log(filteredData);
-
-          setFilteredSites(filteredData);
-        })();
-
-        setIsLoading(false);
-      }
-    },
-    [bounds]
-  );
+  useEffect(() => {
+    const filteredData = list_places?.filter(
+      ({ rating: value }) => value >= rating
+    ) as []
+    console.log(filteredData)
+    setFilteredSitesList(filteredData);
+  }, [rating]);
 
   const Map = useCustomMap();
 
