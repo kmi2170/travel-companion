@@ -1,16 +1,15 @@
-import {
-  Typography,
-  FormControl,
-  Select,
-  MenuItem,
-  useMediaQuery,
-  InputLabel,
-} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { blue } from '@material-ui/core/colors';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { actionTypes } from '../../context/actions';
-import { useCustomContext } from '../../context/hook';
+import {
+  useTravelContext,
+  useTravelDispatchContext,
+} from '../../context/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   formContainer: {
@@ -35,18 +34,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const Component: React.FC = () => {
+const Form = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { state, dispatch } = useCustomContext();
+  const { type, rating } = useTravelContext();
+  const { setType, setRating } = useTravelDispatchContext();
 
   const handeleSetType = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({ type: actionTypes.SET_TYPE, payload: e.target.value });
+    setType(e.target.value);
   };
 
   const handeleSetRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({ type: actionTypes.SET_RATING, payload: +e.target.value });
+    setRating(+e.target.value);
   };
 
   return (
@@ -64,7 +64,7 @@ const Component: React.FC = () => {
       >
         <Select
           id="rating"
-          value={state.type}
+          value={type}
           onChange={handeleSetType}
           defaultValue="restaurants"
           className={classes.select}
@@ -85,27 +85,22 @@ const Component: React.FC = () => {
         margin="none"
         className={classes.formControl}
       >
-        {/*
-        <InputLabel id="rating" margin="dense" shrink>
-          Rating
-        </InputLabel>
-         */}
         <Select
           id="rating"
-          value={state.rating}
+          value={rating}
           onChange={handeleSetRating}
           defaultValue="0"
           className={classes.select}
         >
-          <MenuItem value="0">All Ratings</MenuItem>
-          <MenuItem value="3">3 and above</MenuItem>
-          <MenuItem value="4">4 and above</MenuItem>
-          <MenuItem value="4.5">4.5 and above</MenuItem>
           <MenuItem value="5">5</MenuItem>
+          <MenuItem value="4.5">4.5 and above</MenuItem>
+          <MenuItem value="4">4 and above</MenuItem>
+          <MenuItem value="3">3 and above</MenuItem>
+          <MenuItem value="0">All Ratings</MenuItem>
         </Select>
       </FormControl>
     </div>
   );
 };
 
-export default Component;
+export default Form;

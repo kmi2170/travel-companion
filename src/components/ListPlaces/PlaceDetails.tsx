@@ -18,7 +18,7 @@ import {
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { useCustomContext } from '../../context/hook';
+import { useTravelContext } from '../../context/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   chip: {
@@ -47,9 +47,9 @@ const PlaceDetails = (
 ) => {
   //const PlaceDetails: React.FC<any> = ({ place }, ref: React.MutableRefObject<HTMLDivElement>)) => {
   const classes = useStyles();
-  const { state } = useCustomContext();
+  const { popups } = useTravelContext();
 
-  if (state.popups.selected === index) {
+  if (popups.selected === index) {
     ref?.current[index].scrollIntoView();
     //ref?.scrollIntoView({ block: 'start' });
     // ref?.scrollIntoView({ behavior: 'smooth', block: 'start' });

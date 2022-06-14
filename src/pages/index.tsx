@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import router, { useRouter } from 'next/router';
+// import router, { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
 
@@ -8,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 import { useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { actionTypes } from '../context/actions';
 import { BoundsAPI } from '../api/type_settings';
 import { fetchLocationsByBounds } from '../api/lib/travel_advisor';
 import { fetchCurrentWeatherByBounds } from '../api/lib/open_weather';
@@ -19,7 +18,7 @@ import Navbar from '../components/Navbar/Navbar';
 import ListPlaces from '../components/ListPlaces/ListPlaces';
 import Footer from '../components/Footer';
 import { useCustomeCookies } from '../hooks/useCustomCookies';
-import { useCustomContext } from '../context/hook';
+import { useTravelContext, useTravelDispatchContext } from '../context/hooks';
 import { useCustomMap } from '../hooks/useCustomMap';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -54,8 +53,13 @@ const Home = (dataListWeather: HomeProps) => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { state, dispatch } = useCustomContext();
-  const { query } = useRouter();
+  const { coords, bounds, type, isLoading } = useTravelContext();
+  const {
+    setIsLoading,
+    setInitCoords,
+    setFilteredSites,
+  } = useTravelDispatchContext();
+  // const { query } = useRouter();
   const { cookies, setLocationCookie } = useCustomeCookies();
 
   useEffect(() => {
@@ -64,21 +68,24 @@ const Home = (dataListWeather: HomeProps) => {
       !isNaN(cookies.travel_location.lat) &&
       !isNaN(cookies.travel_location.lng)
     ) {
-      setInitCoords(+cookies.travel_location.lat, +cookies.travel_location.lng);
+      setInitCoords({
+        lat: +cookies.travel_location.lat,
+        lng: +cookies.travel_location.lng,
+      });
     } else {
       ipLookup().then(({ lat, lng }) => {
-        if (!isNaN(lat) && !isNaN(lng)) setInitCoords(+lat, +lng);
+        if (!isNaN(lat) && !isNaN(lng)) setInitCoords({ lat: +lat, lng: +lng });
       });
     }
   }, []);
 
   useEffect(
     () => {
-      if (state.coords.lat && state.coords.lng) {
-        setLocationCookie([state.coords.lat, state.coords.lng]);
+      if (coords.lat && coords.lng) {
+        setLocationCookie([coords.lat, coords.lng]);
       }
     },
-    [state.coords]
+    [coords]
   );
 
   // useEffect(
@@ -166,72 +173,53 @@ const Home = (dataListWeather: HomeProps) => {
   //   });
   // }, [state.rating]);
 
+  // useEffect(
+  //   () => {
+  //     setIsLoading(true);
+
+  // dispatch({
+  //   type: actionTypes.SET_RATING,
+  //   payload: 0,
+  // });
+
+  // dispatch({
+  //   type: actionTypes.SET_POPUP_SELECTED,
+  //   payload: { selected: null },
+  // });
+
+  // router.push({
+  //   pathname: '/',
+  //   query: { ...query, type: state.type },
+  // });
+  //   },
+  //   [state.type]
+  // );
+
   useEffect(
     () => {
-      setLoading(true);
-
-      dispatch({
-        type: actionTypes.SET_RATING,
-        payload: 0,
-      });
-
-      dispatch({
-        type: actionTypes.SET_POPUP_SELECTED,
-        payload: { selected: null },
-      });
-
-      // router.push({
-      //   pathname: '/',
-      //   query: { ...query, type: state.type },
-      // });
-    },
-    [state.type]
-  );
-
-  useEffect(
-    () => {
-      if (
-        state.bounds.ne.lat &&
-        state.bounds.ne.lng &&
-        state.bounds.sw.lat &&
-        state.bounds.sw.lng
-      ) {
-        setLoading(true);
+      if (bounds.ne.lat && bounds.ne.lng && bounds.sw.lat && bounds.sw.lng) {
+        setIsLoading(true);
 
         (async () => {
           const params = {
-            type: state.type,
-            NE_Lat: state.bounds.ne.lat,
-            NE_Lng: state.bounds.ne.lng,
-            SW_Lat: state.bounds.sw.lat,
-            SW_Lng: state.bounds.sw.lng,
+            type: type,
+            NE_Lat: bounds.ne.lat,
+            NE_Lng: bounds.ne.lng,
+            SW_Lat: bounds.sw.lat,
+            SW_Lng: bounds.sw.lng,
           };
           const { data } = await axios('/api/locations', { params });
           const filteredData = data.filter(({ name }) => Boolean(name));
-          console.log(filteredData);
+          // console.log(filteredData);
 
-          dispatch({
-            type: actionTypes.SET_FILTERED_LIST_PLACES,
-            payload: filteredData.length ? filteredData : data,
-          });
+          setFilteredSites(filteredData);
         })();
 
-        setLoading(false);
+        setIsLoading(false);
       }
     },
-    [state.bounds]
+    [bounds]
   );
-
-  const setLoading = (isLoading: boolean) =>
-    dispatch({
-      type: actionTypes.SET_IS_LOADING,
-      payload: isLoading,
-    });
-  const setInitCoords = (lat: number, lng: number) =>
-    dispatch({
-      type: actionTypes.SET_INIT_COORDS,
-      payload: { lat, lng },
-    });
 
   const Map = useCustomMap();
 
@@ -244,7 +232,7 @@ const Home = (dataListWeather: HomeProps) => {
             <>
               <Grid item xs={12} sm={6} md={4}>
                 <div className={classes.listContainer}>
-                  {state.isLoading ? <Loading /> : <ListPlaces />}
+                  {isLoading ? <Loading /> : <ListPlaces />}
                 </div>
               </Grid>
               <Grid item xs={12} sm={6} md={8}>
@@ -262,7 +250,7 @@ const Home = (dataListWeather: HomeProps) => {
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
                 <div className={classes.listContainer}>
-                  {state.isLoading ? <Loading /> : <ListPlaces />}
+                  {isLoading ? <Loading /> : <ListPlaces />}
                 </div>
               </Grid>
             </>

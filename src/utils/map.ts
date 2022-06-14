@@ -1,70 +1,49 @@
+import { MutableRefObject } from "react";
+import { Bounds, Coords } from '../api/type_settings'
 
 export const getMapBoundsInit = (
-  mapRef: any,
-  actionTypes: string,
-  dispatch: ({ }) => void
+  ref: MutableRefObject<any>,
+  setBounds: (bounds: Bounds) => void,
 ) => {
-  const ne = mapRef?.current.getBounds().getNorthEast();
-  const sw = mapRef?.current.getBounds().getSouthWest();
-
-  dispatch({
-    type: actionTypes,
-    payload: { ne, sw },
-  });
+  const ne = ref?.current.getBounds().getNorthEast();
+  const sw = ref?.current.getBounds().getSouthWest();
+  setBounds({ ne, sw })
 };
 
-let bounds = [];
-
+let bounds = []
 export const getMapBoundsOnMoveend = async (
-  e: any,
-  actionTypes: string,
-  dispatch: ({ }) => void
+  e: L.LeafletEvent,
+  setBounds: (bounds: Bounds) => void,
 ) => {
   const ne = e.target.getBounds().getNorthEast();
   const sw = e.target.getBounds().getSouthWest();
   bounds.push({ ne, sw });
 
-  await new Promise(() =>
+  await new Promise(() => {
     setTimeout(() => {
       if (bounds.length > 0) {
-        dispatch({
-          type: actionTypes,
-          payload: bounds[bounds.length - 1],
-        });
-        console.log(bounds[bounds.length - 1]);
-
+        setBounds(bounds[bounds.length - 1])
+        // console.log(bounds[bounds.length - 1]);
         bounds = [];
       }
     }, 5000)
-  );
+  })
 };
 
-let centers = [];
-let zooms = [];
 
-export const getMapCenterZoomOnMoveend = async (
-  e: any,
-  actionTypes: string,
-  dispatch: ({ }) => void
+let centers = [];
+export const getMapCenterOnMoveend = async (
+  e: L.LeafletEvent,
+  setCoords: (lat_lng: Coords) => void
 ) => {
-  const center = e.getCenter();
-  const zoom = e.getZoom();
+  const center = e.target.getCenter();
   centers.push(center);
-  zooms.push(zoom);
 
   await new Promise(() =>
     setTimeout(() => {
       if (centers.length > 0) {
-        dispatch({
-          type: actionTypes,
-          payload: centers[centers.length - 1],
-        });
-
-        console.log(centers[centers.length - 1]);
-        console.log(zooms[zooms.length - 1]);
-
+        setCoords(centers[centers.length - 1])
         centers = [];
-        zooms = [];
       }
     }, 5000)
   );

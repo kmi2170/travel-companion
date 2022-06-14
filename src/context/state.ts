@@ -1,9 +1,11 @@
 import { Bounds, Coords } from '../api/type_settings';
 
+const initLatLng = { lat: null, lng: null };
+
 export const initialState = {
-  init_coords: { lat: null, lng: null },
-  coords: { lat: null, lng: null },
-  bounds: { ne: { lat: null, lng: null }, sw: { lat: null, lng: null } },
+  init_coords: initLatLng,
+  coords: initLatLng,
+  bounds: { ne: initLatLng, sw: initLatLng },
   list_places: null,
   filtered_list_places: null,
   list_weather: null,
@@ -22,8 +24,6 @@ export type State = {
   list_weather: [] | null;
   type: string;
   rating: number;
-  popups: {
-    selected: number;
-  };
+  popups: { selected: number };
   isLoading: boolean;
 };

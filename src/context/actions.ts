@@ -1,18 +1,17 @@
 import { Bounds, Coords } from "../api/type_settings";
 
-
-export enum actionTypes {
-  SET_INIT_COORDS = 'SET_INIT_COORDS',
-  SET_COORDS = 'SET_COORDS',
-  SET_BOUNDS = 'SET_BOUNDS',
-  SET_LIST_PLACES = 'SET_LIST_PLACES',
-  SET_FILTERED_LIST_PLACES = 'SET_FILTERED_LIST_PLACES',
-  SET_LIST_WEATHER = 'SET_LIST_WEATHER',
-  SET_TYPE = 'SET_TYPE',
-  SET_RATING = 'SET_RATING',
-  SET_POPUP_SELECTED = 'SET_POPUP_SELECTED',
-  SET_IS_LOADING = 'SET_IS_LOADING',
-}
+export const actionTypes = {
+  SET_INIT_COORDS: 'SET_INIT_COORDS',
+  SET_COORDS: 'SET_COORDS',
+  SET_BOUNDS: 'SET_BOUNDS',
+  SET_LIST_PLACES: 'SET_LIST_PLACES',
+  SET_FILTERED_LIST_PLACES: 'SET_FILTERED_LIST_PLACES',
+  SET_LIST_WEATHER: 'SET_LIST_WEATHER',
+  SET_TYPE: 'SET_TYPE',
+  SET_RATING: 'SET_RATING',
+  SET_POPUP_SELECTED: 'SET_POPUP_SELECTED',
+  SET_IS_LOADING: 'SET_IS_LOADING',
+} as const
 
 type Payload = {
   [actionTypes.SET_INIT_COORDS]: Coords;
@@ -33,4 +32,4 @@ type ActionMap<M extends { [index: string]: any }> = {
   : { type: Key; payload: M[Key] };
 };
 
-export type ActionsType = ActionMap<Payload>[keyof ActionMap<Payload>];
+export type ActionType = ActionMap<Payload>[keyof ActionMap<Payload>];

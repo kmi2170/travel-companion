@@ -7,7 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { CookiesProvider } from 'react-cookie';
 
 import SEO from '../components/SEO';
-import ListRestaurantsContextProvider from '../context';
+import TravelContextProvider from '../context';
 
 import * as gtag from '../lib/gtag';
 import theme from '../theme/theme';
@@ -26,7 +26,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
   useEffect(
     () => {
-      const handleRouteChange = url => {
+      const handleRouteChange = (url) => {
         gtag.pageview(url);
       };
 
@@ -51,9 +51,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
       <CssBaseline />
       <CookiesProvider>
-        <ListRestaurantsContextProvider>
+        <TravelContextProvider>
           <Component {...pageProps} />
-        </ListRestaurantsContextProvider>
+        </TravelContextProvider>
       </CookiesProvider>
     </ThemeProvider>
   );

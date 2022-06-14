@@ -1,13 +1,13 @@
-import { useMemo, useRef } from 'react';
-
-import { Grid, useMediaQuery } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { useRef } from 'react';
+import Grid from '@material-ui/core/Grid';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
 
 import PlaceDetails from './PlaceDetails';
 import FloatingButton from '../FloatingButton';
-import { useCustomContext } from '../../context/hook';
+import { useTravelContext } from '../../context/hooks';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   text: {},
   list: {
     height: '85vh',
@@ -19,8 +19,7 @@ const ListPlaces = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { state: { filtered_list_places }
-  } = useCustomContext();
+  const { filtered_list_places } = useTravelContext();
 
   // const [elRefs, setElRefs] = useState([]);
   // useEffect(() => {
@@ -36,14 +35,7 @@ const ListPlaces = () => {
   const setRefs = (ref: HTMLElement, index: number) => {
     popupRefs.current[index] = ref;
   };
-
-  // const list = useMemo(
-  //   () => {
-  //     return filtered_list_places?.length ? filtered_list_places : list_places
-  //   }, [filtered_list_places])
-  // console.log('list')
   // console.log(filtered_list_places)
-
 
   return (
     <div>
@@ -56,9 +48,8 @@ const ListPlaces = () => {
         {!isDesktop && <FloatingButton />}
         {filtered_list_places?.map((place, i) => (
           <Grid
-            id={`place${i}`}
+            // id={`place${i}`}
             ref={(ref) => setRefs(ref, i)}
-            // ref={elRefs[i]}
             item
             key={i}
             xs={12}

@@ -1,37 +1,27 @@
-import { createContext, useReducer, useMemo } from 'react';
-import { reducer } from './reducer';
+import { createContext, ReactChild } from 'react';
 import { initialState, State } from './state';
-import { ActionsType } from './actions';
+import { useTravelForContext } from './hooks';
 
-export interface ListPlacesContextProps {
-  state: State;
-  dispatch: React.Dispatch<ActionsType>;
-}
+export type TravelDispatchContextType = Omit<
+  ReturnType<typeof useTravelForContext>,
+  'state'
+>;
 
-export const ListPlacesContext = createContext<ListPlacesContextProps>({
-  state: initialState,
-  dispatch: () => undefined,
-});
+export const TravelContext = createContext<State>(initialState);
+export const TravelDispatchContext = createContext<TravelDispatchContextType>(
+  {} as TravelDispatchContextType
+);
 
-const ListPlacesContextProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const value = useMemo(
-    () => {
-      return { state, dispatch };
-    },
-    [state, dispatch]
-  );
+const TravelContextProvider = ({ children }: { children: ReactChild }) => {
+  const { state, ...dispatchActions } = useTravelForContext();
 
   return (
-    <ListPlacesContext.Provider value={value}>
-      {children}
-    </ListPlacesContext.Provider>
+    <TravelContext.Provider value={state}>
+      <TravelDispatchContext.Provider value={dispatchActions}>
+        {children}
+      </TravelDispatchContext.Provider>
+    </TravelContext.Provider>
   );
 };
 
-export default ListPlacesContextProvider;
+export default TravelContextProvider;

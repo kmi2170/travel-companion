@@ -1,8 +1,6 @@
-import { Typography, Fab } from '@material-ui/core';
+import Fab from '@material-ui/core/Fab';
 import { Navigation as NavigationIcon } from '@material-ui/icons';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-
-import { useCustomContext } from '../context/hook';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -21,9 +19,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const Component: React.FC = () => {
+const FloatingButton = () => {
   const classes = useStyles();
-  const { state, dispatch } = useCustomContext();
 
   const handleClick = () => {
     window.scrollTo(0, 0);
@@ -43,4 +40,4 @@ const Component: React.FC = () => {
   );
 };
 
-export default Component;
+export default FloatingButton;

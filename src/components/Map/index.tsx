@@ -7,17 +7,15 @@ import { LatLng } from 'leaflet-geosearch/dist/providers/provider';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import * as GeoSearch from 'leaflet-geosearch';
 
-import { actionTypes } from '../../context/actions'
 import {
   getMapBoundsInit,
   getMapBoundsOnMoveend,
-  getMapCenterZoomOnMoveend,
+  getMapCenterOnMoveend,
 } from '../../utils/map'
 import PopupContent from './PopupContent';
 import PopupWeather from './PopupWeather';
-
+import { useTravelContext, useTravelDispatchContext } from '../../context/hooks';
 import styles from './Map.module.css';
-import { useCustomContext } from '../../context/hook';
 
 const attribution =
   '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
@@ -75,22 +73,23 @@ const contentWeather = (description: string, temp: number) =>
     <PopupWeather description={description} temp={temp} />
   )}</div>`;
 
-const Map = () => {
-  const { state, dispatch } = useCustomContext()
 
-  console.log(state)
+const Map = () => {
+  const { init_coords, filtered_list_places, rating, list_weather } = useTravelContext()
+  const { setBounds, setCoords, setSelectedPopup } = useTravelDispatchContext()
+
   const [isMarkerText, setIsMarkerText] = useState<Boolean>(
     initZoom > zoomWithMarkerText ? true : false
   );
 
+
   const mapRef = useRef(null);
 
-  // console.log('Map init_coords', state.init_coords);
   useEffect(() => {
     let map = L.map('mymap', {
       center:
-        state.init_coords.lat && state.init_coords.lng
-          ? state.init_coords
+        init_coords.lat && init_coords.lng
+          ? init_coords
           : initCenter,
       zoom: initZoom,
       scrollWheelZoom: false,
@@ -101,8 +100,8 @@ const Map = () => {
     map.addControl(searchControl);
 
     map.on('moveend', (e) => {
-      getMapBoundsOnMoveend(e, actionTypes.SET_BOUNDS, dispatch);
-      getMapCenterZoomOnMoveend(e.target, actionTypes.SET_COORDS, dispatch);
+      getMapBoundsOnMoveend(e, setBounds);
+      getMapCenterOnMoveend(e, setCoords);
     });
 
     map.on('zoom', (e) => {
@@ -112,7 +111,7 @@ const Map = () => {
 
     mapRef.current = map;
 
-    getMapBoundsInit(mapRef, actionTypes.SET_BOUNDS, dispatch);
+    getMapBoundsInit(mapRef, setBounds);
 
     return () => {
       map.removeControl(searchControl);
@@ -128,9 +127,9 @@ const Map = () => {
       }
     });
 
-    const list = state.filtered_list_places?.length
-      ? state.filtered_list_places
-      : state.list_places;
+    const list = filtered_list_places
+    // ? filtered_list_places
+    // : list_places;
 
     list?.forEach(
       ({ latitude, longitude, name, photo, rating, num_reviews }, i) => {
@@ -148,10 +147,7 @@ const Map = () => {
           document.addEventListener('click', (e: MouseEvent) => {
             if ((e.target as HTMLElement).id === `pContent${i}`) {
               console.log('click', i);
-              dispatch({
-                type: actionTypes.SET_POPUP_SELECTED,
-                payload: { selected: i },
-              });
+              setSelectedPopup(i)
             }
           });
 
@@ -174,8 +170,8 @@ const Map = () => {
       }
     );
 
-    if (state.list_weather?.length) {
-      state.list_weather.map(
+    if (list_weather?.length) {
+      list_weather.map(
         ({ coord: { Lat, Lon }, weather, main: { temp } }) => {
           const popupWeather = L.popup({
             maxWidth: 150,
@@ -201,7 +197,7 @@ const Map = () => {
         }
       );
     }
-  }, [state.rating, state.list_places, state.filtered_list_places]);
+  }, [rating, filtered_list_places]);
 
   return <div id="mymap" style={{ height: '85vh' }} />;
 };
