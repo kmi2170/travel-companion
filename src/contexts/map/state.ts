@@ -7,7 +7,6 @@ export const initialState = {
   coords: initLatLng,
   bounds: { ne: initLatLng, sw: initLatLng },
   popups: { selected: null },
-  isLoading: false,
 };
 
 export type State = {
@@ -15,5 +14,4 @@ export type State = {
   coords: Coords;
   bounds: Bounds;
   popups: { selected: number };
-  isLoading: boolean;
 };

@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Loading: React.FC = () => {
+const Loading = () => {
   const classes = useStyles();
 
   return (

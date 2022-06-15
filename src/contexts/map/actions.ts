@@ -5,7 +5,6 @@ export const actionTypes = {
   SET_COORDS: 'SET_COORDS',
   SET_BOUNDS: 'SET_BOUNDS',
   SET_POPUP_SELECTED: 'SET_POPUP_SELECTED',
-  SET_IS_LOADING: 'SET_IS_LOADING',
 } as const
 
 type Payload = {
@@ -13,7 +12,6 @@ type Payload = {
   [actionTypes.SET_COORDS]: Coords;
   [actionTypes.SET_BOUNDS]: Bounds;
   [actionTypes.SET_POPUP_SELECTED]: { selected: number };
-  [actionTypes.SET_IS_LOADING]: boolean;
 };
 
 type ActionMap<M extends { [index: string]: any }> = {

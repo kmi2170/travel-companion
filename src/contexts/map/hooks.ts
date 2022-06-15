@@ -17,9 +17,6 @@ type Payload<T> = Extract<ActionType, { type: T }>['payload'];
 export const useMapContext = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setMapIsLoading = (payload: Payload<'SET_IS_LOADING'>) => {
-    return dispatch({ type: actionTypes.SET_IS_LOADING, payload });
-  };
   const setMapInitCoords = (payload: Payload<'SET_INIT_COORDS'>) => {
     return dispatch({ type: actionTypes.SET_INIT_COORDS, payload });
   };
@@ -35,7 +32,6 @@ export const useMapContext = () => {
 
   return {
     state,
-    setMapIsLoading,
     setMapInitCoords,
     setMapCoords,
     setMapBounds,
