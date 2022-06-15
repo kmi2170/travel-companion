@@ -7,7 +7,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { CookiesProvider } from 'react-cookie';
 
 import SEO from '../components/SEO';
-import TravelContextProvider from '../context';
+import TravelContextProvider from '../contexts/travel';
+import MapContextProvider from '../contexts/map';
 
 import * as gtag from '../lib/gtag';
 import theme from '../theme/theme';
@@ -52,7 +53,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <CssBaseline />
       <CookiesProvider>
         <TravelContextProvider>
-          <Component {...pageProps} />
+          <MapContextProvider>
+            <Component {...pageProps} />
+          </MapContextProvider>
         </TravelContextProvider>
       </CookiesProvider>
     </ThemeProvider>

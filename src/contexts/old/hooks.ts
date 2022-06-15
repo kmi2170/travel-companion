@@ -10,7 +10,7 @@ import { reducer } from './reducer';
 import { actionTypes, ActionType } from './actions';
 import { BoundsAPI } from '../api/type_settings';
 
-export const useTravelContext = () => {
+export const useTravelStateContext = () => {
   return useContext<State>(TravelContext);
 };
 
@@ -20,7 +20,7 @@ export const useTravelDispatchContext = () => {
 
 type Payload<T> = Extract<ActionType, { type: T }>['payload'];
 
-export const useTravelForContext = () => {
+export const useTravelContext = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const setIsLoading = (payload: Payload<'SET_IS_LOADING'>) => {

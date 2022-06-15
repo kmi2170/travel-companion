@@ -30,7 +30,6 @@ export const getMapBoundsOnMoveend = async (
   })
 };
 
-
 let centers = [];
 export const getMapCenterOnMoveend = async (
   e: L.LeafletEvent,

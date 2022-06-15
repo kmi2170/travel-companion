@@ -14,7 +14,8 @@ import {
 } from '../../utils/map'
 import PopupContent from './PopupContent';
 import PopupWeather from './PopupWeather';
-import { useTravelContext, useTravelDispatchContext } from '../../context/hooks';
+import { useTravelStateContext, useTravelDispatchContext } from '../../contexts/travel/hooks';
+import { useMapStateContext, useMapDispatchContext } from '../../contexts/map/hooks';
 import styles from './Map.module.css';
 
 const attribution =
@@ -75,8 +76,9 @@ const contentWeather = (description: string, temp: number) =>
 
 
 const Map = () => {
-  const { init_coords, filtered_list_sites, rating, list_weather } = useTravelContext()
-  const { setBounds, setCoords, setSelectedPopup } = useTravelDispatchContext()
+  const { filtered_list_sites, rating, list_weather } = useTravelStateContext()
+  const { init_coords } = useMapStateContext()
+  const { setMapBounds, setMapCoords, setMapSelectedPopup } = useMapDispatchContext()
 
   const [isMarkerText, setIsMarkerText] = useState<Boolean>(
     initZoom > zoomWithMarkerText ? true : false
@@ -100,8 +102,8 @@ const Map = () => {
     map.addControl(searchControl);
 
     map.on('moveend', (e) => {
-      getMapBoundsOnMoveend(e, setBounds);
-      getMapCenterOnMoveend(e, setCoords);
+      getMapBoundsOnMoveend(e, setMapBounds);
+      getMapCenterOnMoveend(e, setMapCoords);
     });
 
     map.on('zoom', (e) => {
@@ -111,7 +113,7 @@ const Map = () => {
 
     mapRef.current = map;
 
-    getMapBoundsInit(mapRef, setBounds);
+    getMapBoundsInit(mapRef, setMapBounds);
 
     return () => {
       map.removeControl(searchControl);
@@ -144,7 +146,7 @@ const Map = () => {
           document.addEventListener('click', (e: MouseEvent) => {
             if ((e.target as HTMLElement).id === `pContent${i}`) {
               console.log('click', i);
-              setSelectedPopup({ selected: i })
+              setMapSelectedPopup({ selected: i })
             }
           });
 

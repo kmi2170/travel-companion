@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import SiteDetails from './SiteDetails';
 import FloatingButton from '../FloatingButton';
-import { useTravelContext } from '../../context/hooks';
+import { useTravelStateContext } from '../../contexts/travel/hooks';
 
 const useStyles = makeStyles(() => ({
   text: {},
@@ -19,7 +19,7 @@ const ListSites = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { filtered_list_sites } = useTravelContext();
+  const { filtered_list_sites } = useTravelStateContext();
 
   const popupRefs = useRef(new Array(filtered_list_sites?.length));
 
@@ -36,7 +36,7 @@ const ListSites = () => {
     */}
       <Grid container spacing={2} className={classes.list}>
         {!isDesktop && <FloatingButton />}
-        {filtered_list_sites?.map((place, i) => (
+        {filtered_list_sites?.map((site, i) => (
           <Grid
             // id={`place${i}`}
             ref={(ref) => setRefs(ref, i)}
@@ -46,7 +46,7 @@ const ListSites = () => {
           >
             <SiteDetails
               index={i}
-              place={place}
+              site={site}
               ref={popupRefs}
             // ref={elRefs[i]}
             />

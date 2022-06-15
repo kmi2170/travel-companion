@@ -7,9 +7,9 @@ import { blue } from '@material-ui/core/colors';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import {
-  useTravelContext,
+  useTravelStateContext,
   useTravelDispatchContext,
-} from '../../context/hooks';
+} from '../../contexts/travel/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   formContainer: {
@@ -38,22 +38,22 @@ const Form = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { type, rating } = useTravelContext();
-  const { setType, setRating } = useTravelDispatchContext();
+  const { type, rating } = useTravelStateContext();
+  const { setTravelType, setTravelRating } = useTravelDispatchContext();
 
   const handeleSetType = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setType(e.target.value);
+    setTravelType(e.target.value);
   };
 
   const handeleSetRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRating(+e.target.value);
+    setTravelRating(+e.target.value);
   };
 
   return (
     <div className={classes.formContainer}>
       {isDesktop && (
         <Typography variant="h6" align="center" className={classes.label}>
-          Type
+          Site
         </Typography>
       )}
       <FormControl

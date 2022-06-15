@@ -11,7 +11,8 @@ import Navbar from '../components/Navbar';
 import ListSites from '../components/ListSites';
 import Footer from '../components/Footer';
 import { useCustomeCookies } from '../hooks/useCustomCookies';
-import { useTravelContext, useTravelDispatchContext } from '../context/hooks';
+import { useTravelStateContext, useTravelDispatchContext } from '../contexts/travel/hooks';
+import { useMapStateContext, useMapDispatchContext } from '../contexts/map/hooks';
 import { useCustomMap } from '../hooks/useCustomMap';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -41,22 +42,16 @@ const Home = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
+  const { list_sites, type, rating, isLoading } = useTravelStateContext();
   const {
-    list_sites,
-    coords,
-    bounds,
-    type,
-    rating,
-    isLoading,
-  } = useTravelContext();
-  const {
-    setInitCoords,
-    setRating,
-    setFilteredSites,
-    setSelectedPopup,
-    fetchSites,
-    fetchWeather
+    setTravelRating,
+    setTravelFilteredSites,
+    fetchTravelSites,
+    fetchTravelWeather
   } = useTravelDispatchContext();
+  const { coords, bounds } = useMapStateContext();
+  const { setMapInitCoords, setMapSelectedPopup } = useMapDispatchContext();
+
   const { cookies, setLocationCookie } = useCustomeCookies();
 
   const Map = useCustomMap();
@@ -65,13 +60,12 @@ const Home = () => {
     if (cookies.travel_location) {
       const [lat, lng] = cookies.travel_location
       if (!isNaN(lat) && !isNaN(lng)) {
-        setInitCoords({ lat, lng });
+        setMapInitCoords({ lat, lng });
         return
       }
     }
-
     ipLookup().then(({ lat, lng }) => {
-      if (!isNaN(lat) && !isNaN(lng)) setInitCoords({ lat: +lat, lng: +lng })
+      if (!isNaN(lat) && !isNaN(lng)) setMapInitCoords({ lat: +lat, lng: +lng })
     });
   }, []);
 
@@ -88,7 +82,7 @@ const Home = () => {
 
   useEffect(() => {
     if (NE_Lat && NE_Lng && SW_Lat && SW_Lng) {
-      fetchSites({ type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }, rating)
+      fetchTravelSites({ type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }, rating)
     }
   }, [bounds, type]);
 
@@ -96,7 +90,7 @@ const Home = () => {
     const diff_Lat = Math.abs(+NE_Lat - +SW_Lat);
     const diff_Lng = Math.abs(+NE_Lng - +SW_Lng);
     if (NE_Lat && NE_Lng && SW_Lat && SW_Lng && diff_Lat < 25.0 && diff_Lng < 25.0) {
-      fetchWeather({ NE_Lat, NE_Lng, SW_Lat, SW_Lng })
+      fetchTravelWeather({ NE_Lat, NE_Lng, SW_Lat, SW_Lng })
     }
   }, [bounds]);
 
@@ -104,12 +98,12 @@ const Home = () => {
     const filteredData = list_sites?.filter(
       ({ rating: value }) => value >= rating
     ) as []
-    setFilteredSites(filteredData);
+    setTravelFilteredSites(filteredData);
   }, [rating]);
 
   useEffect(() => {
-    setRating(0)
-    setSelectedPopup({ selected: null });
+    setTravelRating(0)
+    setMapSelectedPopup({ selected: null });
   }, [type]);
 
   return (

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -20,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Navbar = () => {
   const classes = useStyles();
+  console.log('Navbar');
 
   return (
     <AppBar position="sticky">
@@ -33,4 +35,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default memo(Navbar);
