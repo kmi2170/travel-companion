@@ -19,11 +19,11 @@ export const getMapBoundsOnMoveend = async (
   const sw = e.target.getBounds().getSouthWest();
   bounds.push({ ne, sw });
 
+  // call API only for the last pushed data during 5s to reduce the number of API calls
   await new Promise(() => {
     setTimeout(() => {
       if (bounds.length > 0) {
         setBounds(bounds[bounds.length - 1])
-        // console.log(bounds[bounds.length - 1]);
         bounds = [];
       }
     }, 5000)

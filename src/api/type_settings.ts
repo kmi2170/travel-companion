@@ -7,8 +7,8 @@ export type Bounds = {
 
 export interface BoundsAPI {
   type: string;
-  NE_Lat: string;
-  NE_Lng: string;
-  SW_Lat: string;
-  SW_Lng: string;
+  NE_Lat: number;
+  NE_Lng: number;
+  SW_Lat: number;
+  SW_Lng: number;
 }

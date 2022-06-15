@@ -1,18 +1,11 @@
 import { useEffect } from 'react';
-// import router, { useRouter } from 'next/router';
-// import { GetServerSideProps } from 'next';
-import axios from 'axios';
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-// import { BoundsAPI } from '../api/type_settings';
-// import { fetchLocationsByBounds } from '../api/lib/travel_advisor';
-// import { fetchCurrentWeatherByBounds } from '../api/lib/open_weather';
 import { ipLookup } from '../api/lib/ipLookup';
-
 import Loading from '../components/Loading';
 import Navbar from '../components/Navbar/Navbar';
 import ListPlaces from '../components/ListPlaces/ListPlaces';
@@ -62,13 +55,13 @@ const Home = () => {
     isLoading,
   } = useTravelContext();
   const {
-    setIsLoading,
     setInitCoords,
-    setSitesList,
-    setWeatherList,
+    setRating,
     setFilteredSitesList,
+    setSelectedPopup,
+    fetchSitesList,
+    fetchWeather
   } = useTravelDispatchContext();
-  // const { query } = useRouter();
   const { cookies, setLocationCookie } = useCustomeCookies();
 
   const Map = useCustomMap();
@@ -95,40 +88,9 @@ const Home = () => {
 
 
 
-  // useEffect(() => {
-  //   if (
-  //     dataListWeather &&
-  //     dataListWeather['list'] &&
-  //     dataListWeather['list'].length
-  //   )
-  //     dispatch({
-  //       type: actionTypes.SET_LIST_WEATHER,
-  //       payload: dataListWeather['list'],
-  //     });
-  // }, [dataListWeather]);
 
 
-  // useEffect(
-  //   () => {
-  //     setIsLoading(true);
 
-  // dispatch({
-  //   type: actionTypes.SET_RATING,
-  //   payload: 0,
-  // });
-
-  // dispatch({
-  //   type: actionTypes.SET_POPUP_SELECTED,
-  //   payload: { selected: null },
-  // });
-
-  // router.push({
-  //   pathname: '/',
-  //   query: { ...query, type: state.type },
-  // });
-  //   },
-  //   [state.type]
-  // );
 
   const NE_Lat = bounds?.ne?.lat
   const NE_Lng = bounds?.ne?.lng
@@ -137,16 +99,7 @@ const Home = () => {
 
   useEffect(() => {
     if (NE_Lat && NE_Lng && SW_Lat && SW_Lng) {
-      setIsLoading(true);
-      (async () => {
-        const params = { type, NE_Lat, NE_Lng, SW_Lat, SW_Lng };
-        const { data } = await axios('/api/locations', { params });
-        const filteredData = data?.filter(({ name }) => Boolean(name))
-          .filter(({ rating: value }) => value >= rating);
-        setSitesList(data);
-        setFilteredSitesList(filteredData);
-      })();
-      setIsLoading(false);
+      fetchSitesList({ type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }, rating)
     }
   }, [bounds, type]);
 
@@ -154,14 +107,7 @@ const Home = () => {
     const diff_Lat = Math.abs(+NE_Lat - +SW_Lat);
     const diff_Lng = Math.abs(+NE_Lng - +SW_Lng);
     if (NE_Lat && NE_Lng && SW_Lat && SW_Lng && diff_Lat < 25.0 && diff_Lng < 25.0) {
-      setIsLoading(true);
-      (async () => {
-        const params = { NE_Lat, NE_Lng, SW_Lat, SW_Lng };
-        const { data } = await axios('/api/weather', { params });
-        setWeatherList(data['list'])
-        console.log(data)
-      })();
-      setIsLoading(false);
+      fetchWeather({ NE_Lat, NE_Lng, SW_Lat, SW_Lng })
     }
   }, [bounds]);
 
@@ -171,6 +117,11 @@ const Home = () => {
     ) as []
     setFilteredSitesList(filteredData);
   }, [rating]);
+
+  useEffect(() => {
+    setRating(0)
+    setSelectedPopup({ selected: null });
+  }, [type]);
 
   return (
     <div className={classes.root}>
@@ -214,26 +165,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-//   const { type, NE_Lat, NE_Lng, SW_Lat, SW_Lng } = query;
-//   const baseArgs = { NE_Lat, NE_Lng, SW_Lat, SW_Lng } as Omit<
-//     BoundsAPI,
-//     'type'
-//   >;
-
-//   const dataListPlaces =
-//     NE_Lat && NE_Lng && SW_Lat && SW_Lng
-//       ? await fetchLocationsByBounds({ type, ...baseArgs } as BoundsAPI)
-//       : null;
-
-//   const diffLat = Math.abs(+NE_Lat - +SW_Lat);
-//   const diffLng = Math.abs(+NE_Lng - +SW_Lng);
-
-//   const dataListWeather =
-//     NE_Lat && NE_Lng && SW_Lat && SW_Lng && diffLat < 25.0 && diffLng < 25.0
-//       ? await fetchCurrentWeatherByBounds(baseArgs)
-//       : null;
-
-//   return { props: { dataListPlaces } };
-// };
