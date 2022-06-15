@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Fab from '@material-ui/core/Fab';
 import { Navigation as NavigationIcon } from '@material-ui/icons';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -22,6 +23,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 const FloatingButton = () => {
   const classes = useStyles();
 
+  console.log('button');
+
   const handleClick = () => {
     window.scrollTo(0, 0);
   };
@@ -40,4 +43,4 @@ const FloatingButton = () => {
   );
 };
 
-export default FloatingButton;
+export default memo(FloatingButton);
