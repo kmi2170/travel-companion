@@ -71,67 +71,29 @@ const Home = () => {
   // const { query } = useRouter();
   const { cookies, setLocationCookie } = useCustomeCookies();
 
+  const Map = useCustomMap();
+
   useEffect(() => {
-    if (
-      cookies.travel_location &&
-      !isNaN(cookies.travel_location.lat) &&
-      !isNaN(cookies.travel_location.lng)) {
-      setInitCoords({
-        lat: +cookies.travel_location.lat,
-        lng: +cookies.travel_location.lng,
-      });
-    } else {
-      ipLookup().then(({ lat, lng }) => {
-        if (!isNaN(lat) && !isNaN(lng)) setInitCoords({ lat: +lat, lng: +lng })
-      });
+    if (cookies.travel_location) {
+      const [lat, lng] = cookies.travel_location
+      if (!isNaN(lat) && !isNaN(lng)) {
+        setInitCoords({ lat, lng });
+        return
+      }
     }
+
+    ipLookup().then(({ lat, lng }) => {
+      if (!isNaN(lat) && !isNaN(lng)) setInitCoords({ lat: +lat, lng: +lng })
+    });
   }, []);
 
   useEffect(() => {
-    if (coords.lat && coords.lng) { setLocationCookie([coords.lat, coords.lng]) }
+    if (coords.lat && coords.lng) {
+      setLocationCookie([coords.lat, coords.lng])
+    }
   }, [coords]);
 
-  // useEffect(
-  //   () => {
-  //     if (state.bounds.ne.lat && state.bounds.ne.lng) {
-  //       router.push({
-  //        pathname: '/',
-  //         query: {
-  //           type: state.type,
-  //           NE_Lat: state.bounds.ne.lat,
-  //           NE_Lng: state.bounds.ne.lng,
-  //           SW_Lat: state.bounds.sw.lat,
-  //           SW_Lng: state.bounds.sw.lng,
-  //         },
-  //       });
-  //     }
-  //   },
-  //   [state.bounds]
-  // );
 
-  // useEffect(() => {
-
-  //   if (dataListPlaces && dataListPlaces.length) {
-  // const dataListPlacesValidated = dataListPlaces.filter(({ name }) =>
-  //   Boolean(name)
-  // );
-
-  // const filterdListPlaces = state.rating
-  //   ? []
-  //   : dataListPlacesValidated.filter(
-  //     ({ rating }) => rating >= state.rating
-  //   );
-
-  // dispatch({
-  //   type: actionTypes.SET_LIST_PLACES,
-  //   payload: dataListPlacesValidated as [],
-  // });
-
-  // dispatch({
-  //   type: actionTypes.SET_FILTERED_LIST_PLACES,
-  //   payload: filterdListPlaces as [] | null,
-  // });
-  // }, [dataListPlaces]);
 
   // useEffect(() => {
   //   if (
@@ -145,17 +107,6 @@ const Home = () => {
   //     });
   // }, [dataListWeather]);
 
-  // useEffect(() => {
-
-  //   const filterdListPlaces = state.list_places?.filter(
-  //     ({ rating }) => rating >= state.rating
-  //   );
-
-  // dispatch({
-  //   type: actionTypes.SET_FILTERED_LIST_PLACES,
-  //   payload: filterdListPlaces as [],
-  // });
-  // }, [state.rating]);
 
   // useEffect(
   //   () => {
@@ -179,21 +130,19 @@ const Home = () => {
   //   [state.type]
   // );
 
+  const NE_Lat = bounds?.ne?.lat
+  const NE_Lng = bounds?.ne?.lng
+  const SW_Lat = bounds?.sw?.lat
+  const SW_Lng = bounds?.sw?.lng
+
   useEffect(() => {
-    if (bounds.ne.lat && bounds.ne.lng && bounds.sw.lat && bounds.sw.lng) {
+    if (NE_Lat && NE_Lng && SW_Lat && SW_Lng) {
       setIsLoading(true);
       (async () => {
-        const params = {
-          type: type,
-          NE_Lat: bounds.ne.lat,
-          NE_Lng: bounds.ne.lng,
-          SW_Lat: bounds.sw.lat,
-          SW_Lng: bounds.sw.lng,
-        };
+        const params = { type, NE_Lat, NE_Lng, SW_Lat, SW_Lng };
         const { data } = await axios('/api/locations', { params });
         const filteredData = data?.filter(({ name }) => Boolean(name))
           .filter(({ rating: value }) => value >= rating);
-        // console.log(filteredData);
         setSitesList(data);
         setFilteredSitesList(filteredData);
       })();
@@ -202,32 +151,26 @@ const Home = () => {
   }, [bounds, type]);
 
   useEffect(() => {
-    if (bounds.ne.lat && bounds.ne.lng && bounds.sw.lat && bounds.sw.lng) {
+    const diff_Lat = Math.abs(+NE_Lat - +SW_Lat);
+    const diff_Lng = Math.abs(+NE_Lng - +SW_Lng);
+    if (NE_Lat && NE_Lng && SW_Lat && SW_Lng && diff_Lat < 25.0 && diff_Lng < 25.0) {
       setIsLoading(true);
       (async () => {
-        const params = {
-          NE_Lat: bounds.ne.lat,
-          NE_Lng: bounds.ne.lng,
-          SW_Lat: bounds.sw.lat,
-          SW_Lng: bounds.sw.lng,
-        };
+        const params = { NE_Lat, NE_Lng, SW_Lat, SW_Lng };
         const { data } = await axios('/api/weather', { params });
-        setWeatherList(data)
+        setWeatherList(data['list'])
         console.log(data)
       })();
       setIsLoading(false);
     }
-  }, [bounds,]);
+  }, [bounds]);
 
   useEffect(() => {
     const filteredData = list_places?.filter(
       ({ rating: value }) => value >= rating
     ) as []
-    console.log(filteredData)
     setFilteredSitesList(filteredData);
   }, [rating]);
-
-  const Map = useCustomMap();
 
   return (
     <div className={classes.root}>

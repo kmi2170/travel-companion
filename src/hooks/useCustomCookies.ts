@@ -9,8 +9,8 @@ const cookiesOptions = {
 export const useCustomeCookies = () => {
   const [cookies, setCookie] = useCookies(['travel_location']);
 
-  const setLocationCookie = location =>
-    setCookie('travel_location', location, cookiesOptions);
+  const setLocationCookie = (lat_lng) =>
+    setCookie('travel_location', lat_lng, cookiesOptions);
 
   return { cookies, setLocationCookie };
 };
