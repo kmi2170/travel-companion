@@ -35,15 +35,15 @@ export const useTravelForContext = () => {
   const setBounds = (payload: Payload<'SET_BOUNDS'>) => {
     return dispatch({ type: actionTypes.SET_BOUNDS, payload });
   };
-  const setFilteredSitesList = (
-    payload: Payload<'SET_FILTERED_LIST_PLACES'>
+  const setFilteredSites = (
+    payload: Payload<'SET_FILTERED_LIST_SITES'>
   ) => {
-    return dispatch({ type: actionTypes.SET_FILTERED_LIST_PLACES, payload });
+    return dispatch({ type: actionTypes.SET_FILTERED_LIST_SITES, payload });
   };
-  const setSitesList = (payload: Payload<'SET_LIST_PLACES'>) => {
-    return dispatch({ type: actionTypes.SET_LIST_PLACES, payload });
+  const setSites = (payload: Payload<'SET_LIST_SITES'>) => {
+    return dispatch({ type: actionTypes.SET_LIST_SITES, payload });
   };
-  const setWeatherList = (payload: Payload<'SET_LIST_WEATHER'>) => {
+  const setWeather = (payload: Payload<'SET_LIST_WEATHER'>) => {
     return dispatch({ type: actionTypes.SET_LIST_WEATHER, payload });
   };
   const setType = (payload: Payload<'SET_TYPE'>) => {
@@ -56,7 +56,7 @@ export const useTravelForContext = () => {
     return dispatch({ type: actionTypes.SET_POPUP_SELECTED, payload });
   };
 
-  const fetchSitesList = (
+  const fetchSites = (
     { type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }: BoundsAPI, rating: Payload<'SET_RATING'>
   ) => {
     try {
@@ -66,8 +66,8 @@ export const useTravelForContext = () => {
         const { data } = await axios('/api/locations', { params });
         const filteredData = data?.filter(({ name }) => Boolean(name))
           .filter(({ rating: value }) => value >= rating);
-        setSitesList(data);
-        setFilteredSitesList(filteredData);
+        setSites(data);
+        setFilteredSites(filteredData);
       })();
     } catch (error) {
       console.error(error)
@@ -82,7 +82,7 @@ export const useTravelForContext = () => {
       (async () => {
         const params = { NE_Lat, NE_Lng, SW_Lat, SW_Lng };
         const { data } = await axios('/api/weather', { params });
-        setWeatherList(data['list'])
+        setWeather(data['list'])
       })();
     } catch (error) {
       console.error(error)
@@ -97,13 +97,13 @@ export const useTravelForContext = () => {
     setInitCoords,
     setCoords,
     setBounds,
-    setFilteredSitesList,
-    setSitesList,
-    setWeatherList,
+    setFilteredSites,
+    setSites,
+    setWeather,
     setType,
     setRating,
     setSelectedPopup,
-    fetchSitesList,
+    fetchSites,
     fetchWeather
   };
 };

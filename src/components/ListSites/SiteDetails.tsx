@@ -36,13 +36,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface PlaceDetailsProps {
+interface SiteDetailsProps {
   index: number;
   place: any;
 }
 
-const PlaceDetails = (
-  { index, place }: PlaceDetailsProps,
+const SiteDetails = (
+  { index, place }: SiteDetailsProps,
   ref: React.MutableRefObject<HTMLDivElement[]>
 ) => {
   //const PlaceDetails: React.FC<any> = ({ place }, ref: React.MutableRefObject<HTMLDivElement>)) => {
@@ -166,5 +166,5 @@ const PlaceDetails = (
   );
 };
 
-export default forwardRef(PlaceDetails);
+export default forwardRef(SiteDetails);
 //export default PlaceDetails;

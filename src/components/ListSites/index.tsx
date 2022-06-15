@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
 
-import PlaceDetails from './PlaceDetails';
+import SiteDetails from './SiteDetails';
 import FloatingButton from '../FloatingButton';
 import { useTravelContext } from '../../context/hooks';
 
@@ -15,27 +15,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ListPlaces = () => {
+const ListSites = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { filtered_list_places } = useTravelContext();
+  const { filtered_list_sites } = useTravelContext();
 
-  // const [elRefs, setElRefs] = useState([]);
-  // useEffect(() => {
-  //   setElRefs((refs) =>
-  //     Array(state.list_places?.length)
-  //       .fill()
-  //       .map((_, i) => refs[i] || createRef())
-  //   );
-  // }, [state.list_places]);
-
-  const popupRefs = useRef(new Array(filtered_list_places?.length));
+  const popupRefs = useRef(new Array(filtered_list_sites?.length));
 
   const setRefs = (ref: HTMLElement, index: number) => {
     popupRefs.current[index] = ref;
   };
-  // console.log(filtered_list_places)
 
   return (
     <div>
@@ -46,7 +36,7 @@ const ListPlaces = () => {
     */}
       <Grid container spacing={2} className={classes.list}>
         {!isDesktop && <FloatingButton />}
-        {filtered_list_places?.map((place, i) => (
+        {filtered_list_sites?.map((place, i) => (
           <Grid
             // id={`place${i}`}
             ref={(ref) => setRefs(ref, i)}
@@ -54,7 +44,7 @@ const ListPlaces = () => {
             key={i}
             xs={12}
           >
-            <PlaceDetails
+            <SiteDetails
               index={i}
               place={place}
               ref={popupRefs}
@@ -67,4 +57,4 @@ const ListPlaces = () => {
   );
 };
 
-export default ListPlaces;
+export default ListSites;

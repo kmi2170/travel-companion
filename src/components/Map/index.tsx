@@ -75,7 +75,7 @@ const contentWeather = (description: string, temp: number) =>
 
 
 const Map = () => {
-  const { init_coords, filtered_list_places, rating, list_weather } = useTravelContext()
+  const { init_coords, filtered_list_sites, rating, list_weather } = useTravelContext()
   const { setBounds, setCoords, setSelectedPopup } = useTravelDispatchContext()
 
   const [isMarkerText, setIsMarkerText] = useState<Boolean>(
@@ -127,11 +127,8 @@ const Map = () => {
       }
     });
 
-    const list = filtered_list_places
-    // ? filtered_list_places
-    // : list_places;
 
-    list?.forEach(
+    filtered_list_sites?.forEach(
       ({ latitude, longitude, name, photo, rating, num_reviews }, i) => {
         if (latitude && longitude && name) {
           const popup = L.popup({
@@ -147,7 +144,7 @@ const Map = () => {
           document.addEventListener('click', (e: MouseEvent) => {
             if ((e.target as HTMLElement).id === `pContent${i}`) {
               console.log('click', i);
-              setSelectedPopup(i)
+              setSelectedPopup({ selected: i })
             }
           });
 
@@ -197,7 +194,7 @@ const Map = () => {
         }
       );
     }
-  }, [rating, filtered_list_places]);
+  }, [rating, filtered_list_sites]);
 
   return <div id="mymap" style={{ height: '85vh' }} />;
 };

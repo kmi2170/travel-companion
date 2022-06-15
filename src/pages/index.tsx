@@ -7,8 +7,8 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { ipLookup } from '../api/lib/ipLookup';
 import Loading from '../components/Loading';
-import Navbar from '../components/Navbar/Navbar';
-import ListPlaces from '../components/ListPlaces/ListPlaces';
+import Navbar from '../components/Navbar';
+import ListSites from '../components/ListSites';
 import Footer from '../components/Footer';
 import { useCustomeCookies } from '../hooks/useCustomCookies';
 import { useTravelContext, useTravelDispatchContext } from '../context/hooks';
@@ -37,17 +37,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-// interface HomeProps {
-//   dataListPlaces?: [] | null;
-//   dataListWeather?: {} | null;
-// }
-
 const Home = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
   const {
-    list_places,
+    list_sites,
     coords,
     bounds,
     type,
@@ -57,9 +52,9 @@ const Home = () => {
   const {
     setInitCoords,
     setRating,
-    setFilteredSitesList,
+    setFilteredSites,
     setSelectedPopup,
-    fetchSitesList,
+    fetchSites,
     fetchWeather
   } = useTravelDispatchContext();
   const { cookies, setLocationCookie } = useCustomeCookies();
@@ -86,12 +81,6 @@ const Home = () => {
     }
   }, [coords]);
 
-
-
-
-
-
-
   const NE_Lat = bounds?.ne?.lat
   const NE_Lng = bounds?.ne?.lng
   const SW_Lat = bounds?.sw?.lat
@@ -99,7 +88,7 @@ const Home = () => {
 
   useEffect(() => {
     if (NE_Lat && NE_Lng && SW_Lat && SW_Lng) {
-      fetchSitesList({ type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }, rating)
+      fetchSites({ type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }, rating)
     }
   }, [bounds, type]);
 
@@ -112,10 +101,10 @@ const Home = () => {
   }, [bounds]);
 
   useEffect(() => {
-    const filteredData = list_places?.filter(
+    const filteredData = list_sites?.filter(
       ({ rating: value }) => value >= rating
     ) as []
-    setFilteredSitesList(filteredData);
+    setFilteredSites(filteredData);
   }, [rating]);
 
   useEffect(() => {
@@ -132,7 +121,7 @@ const Home = () => {
             <>
               <Grid item xs={12} sm={6} md={4}>
                 <div className={classes.listContainer}>
-                  {isLoading ? <Loading /> : <ListPlaces />}
+                  {isLoading ? <Loading /> : <ListSites />}
                 </div>
               </Grid>
               <Grid item xs={12} sm={6} md={8}>
@@ -150,7 +139,7 @@ const Home = () => {
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
                 <div className={classes.listContainer}>
-                  {isLoading ? <Loading /> : <ListPlaces />}
+                  {isLoading ? <Loading /> : <ListSites />}
                 </div>
               </Grid>
             </>

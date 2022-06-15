@@ -9,10 +9,10 @@ export const reducer = (state: State, action: ActionType) => {
       return { ...state, coords: action.payload };
     case actionTypes.SET_BOUNDS:
       return { ...state, bounds: action.payload };
-    case actionTypes.SET_LIST_PLACES:
-      return { ...state, list_places: action.payload };
-    case actionTypes.SET_FILTERED_LIST_PLACES:
-      return { ...state, filtered_list_places: action.payload };
+    case actionTypes.SET_LIST_SITES:
+      return { ...state, list_sites: action.payload };
+    case actionTypes.SET_FILTERED_LIST_SITES:
+      return { ...state, filtered_list_sites: action.payload };
     case actionTypes.SET_LIST_WEATHER:
       return { ...state, list_weather: action.payload };
     case actionTypes.SET_TYPE:
