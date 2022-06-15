@@ -18,7 +18,6 @@ import {
 import Rating from '@material-ui/lab/Rating';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { useTravelStateContext } from '../../contexts/travel/hooks';
 import { useMapStateContext } from '../../contexts/map/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -46,16 +45,12 @@ const SiteDetails = (
   { index, site }: SiteDetailsProps,
   ref: React.MutableRefObject<HTMLDivElement[]>
 ) => {
-  //const PlaceDetails: React.FC<any> = ({ site }, ref: React.MutableRefObject<HTMLDivElement>)) => {
   const classes = useStyles();
   const { popups } = useMapStateContext();
+  const { name, rating, price_level, address, phone, cuisine, awards, ranking, web_url, website, num_reviews, photo } = site
 
   if (popups.selected === index) {
     ref?.current[index].scrollIntoView();
-    //ref?.scrollIntoView({ block: 'start' });
-    // ref?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    // window.scroll(0, ref?.current.offsetTop - 30);
-    // console.log(ref);
   }
 
   return (
@@ -64,38 +59,38 @@ const SiteDetails = (
         <CardMedia
           component="img"
           height={300}
-          image={site.photo && site.photo.images.large.url}
-          title={site.name}
-          alt={site.name}
+          image={photo && photo.images.large.url}
+          title={name}
+          alt={name}
         />
         <CardContent>
           <Typography variant="h5" gutterBottom>
-            {site.name}
+            {name}
           </Typography>
           <Box display="flex" justifyContent="space-between">
             <Rating
               name="read-only"
-              value={+site.rating}
+              value={+rating}
               precision={0.5}
               readOnly
             />
             <Typography component="legend">
-              {site.num_reviews} review{+site.num_reviews > 1 && 's'}
+              {num_reviews} review{+num_reviews > 1 && 's'}
             </Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="subtitle1">Price Range</Typography>
             <Typography variant="subtitle1" gutterBottom>
-              {site.price_level}
+              {price_level}
             </Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="subtitle1">Ranking</Typography>
             <Typography variant="subtitle1" gutterBottom>
-              {site.ranking}
+              {ranking}
             </Typography>
           </Box>
-          {site?.awards?.map((award, i) => (
+          {awards?.map((award, i) => (
             <Box
               key={i}
               my={1}
@@ -117,7 +112,7 @@ const SiteDetails = (
               </Typography>
             </Box>
           ))}
-          {site?.cuisine?.map(({ name }) => (
+          {cuisine?.map(({ name }) => (
             <Chip
               key={name}
               size="small"
@@ -125,38 +120,38 @@ const SiteDetails = (
               className={classes.chip}
             />
           ))}
-          {site?.address && (
+          {address && (
             <Typography
               variant="body2"
               color="textSecondary"
               className={classes.address}
             >
               <LocationOnIcon />
-              {site.address}
+              {address}
             </Typography>
           )}
-          {site?.phone && (
+          {phone && (
             <Typography
               variant="body2"
               color="textSecondary"
               className={classes.phone}
             >
               <PhoneIcon />
-              {site.phone}
+              {phone}
             </Typography>
           )}
           <CardActions>
             <Button
               size="small"
               color="primary"
-              onClick={() => window.open(site.web_url, '_blank')}
+              onClick={() => window.open(web_url, '_blank')}
             >
               Trip Advisor
             </Button>
             <Button
               size="small"
               color="primary"
-              onClick={() => window.open(site.website, '_blank')}
+              onClick={() => window.open(website, '_blank')}
             >
               Website
             </Button>
@@ -168,4 +163,3 @@ const SiteDetails = (
 };
 
 export default forwardRef(SiteDetails);
-//export default PlaceDetails;
