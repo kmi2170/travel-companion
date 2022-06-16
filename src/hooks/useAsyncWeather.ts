@@ -6,7 +6,7 @@ import { useMapStateContext } from '../contexts/map/hooks';
 import { BoundsAPI } from '../api/type_settings';
 
 export const useAsyncWeather = () => {
-  const { setTravelIsLoading, setTravelWeather } = useTravelDispatchContext();
+  const { setTravelWeather } = useTravelDispatchContext();
   const { bounds } = useMapStateContext();
 
   const NE_Lat = bounds?.ne?.lat;
@@ -20,8 +20,6 @@ export const useAsyncWeather = () => {
   const fetchTravelWeather = useCallback(
     ({ NE_Lat, NE_Lng, SW_Lat, SW_Lng }: Omit<BoundsAPI, 'type'>) => {
       try {
-        setTravelIsLoading(true);
-
         (async () => {
           const params = { NE_Lat, NE_Lng, SW_Lat, SW_Lng };
           const { data } = await axios('/api/weather', { params });
@@ -29,8 +27,6 @@ export const useAsyncWeather = () => {
         })();
       } catch (error) {
         console.error(error);
-      } finally {
-        setTravelIsLoading(false);
       }
     },
     [bounds]

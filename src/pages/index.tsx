@@ -5,23 +5,15 @@ import Grid from '@material-ui/core/Grid';
 import { useMediaQuery } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { ipLookup } from '../api/lib/ipLookup';
 import Loading from '../components/Loading';
 import Navbar from '../components/Navbar';
 import ListSites from '../components/ListSites';
 import Footer from '../components/Footer';
-import { useCustomeCookies } from '../hooks/useCustomCookies';
-import {
-  useTravelStateContext,
-  useTravelDispatchContext,
-} from '../contexts/travel/hooks';
-import {
-  useMapStateContext,
-  useMapDispatchContext,
-} from '../contexts/map/hooks';
+import { useTravelStateContext } from '../contexts/travel/hooks';
 import { useCustomMap } from '../hooks/useCustomMap';
 import { useAsyncWeather } from '../hooks/useAsyncWeather';
 import { useAsyncTravel } from '../hooks/useAsyncTravel';
+import { useSetMapInitCoords } from '../hooks/useSetMapInitCoords';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -50,31 +42,11 @@ const Home = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { isLoading } = useTravelStateContext();
-  const { coords, bounds } = useMapStateContext();
-  const { setMapInitCoords } = useMapDispatchContext();
-
-  const { cookies } = useCustomeCookies(coords);
-
   const Map = useCustomMap();
 
-  /* eslint-disable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    if (cookies.travel_location) {
-      const [lat, lng] = cookies.travel_location;
-      if (!isNaN(lat) && !isNaN(lng)) {
-        setMapInitCoords({ lat, lng });
-        return;
-      }
-    }
-    ipLookup().then(({ lat, lng }) => {
-      if (!isNaN(lat) && !isNaN(lng))
-        setMapInitCoords({ lat: +lat, lng: +lng });
-    });
-  }, []);
-  /* eslint-enable react-hooks/exhaustive-deps */
+  useSetMapInitCoords();
 
-  useAsyncTravel();
+  const { isLoading } = useAsyncTravel();
 
   useAsyncWeather();
 

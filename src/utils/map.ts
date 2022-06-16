@@ -1,22 +1,21 @@
-import { MutableRefObject } from "react";
-import { Bounds, Coords } from '../api/type_settings'
+import { MutableRefObject } from 'react';
+import { Bounds, Coords } from '../api/type_settings';
 
 export const getMapBoundsInit = (
   ref: MutableRefObject<any>,
-  setBounds: (bounds: Bounds) => void,
+  setBounds: (bounds: Bounds) => void
 ) => {
   const ne = ref?.current.getBounds().getNorthEast();
   const sw = ref?.current.getBounds().getSouthWest();
-  setBounds({ ne, sw })
+  setBounds({ ne, sw });
 };
 
-let bounds = []
+let bounds = [];
 export const getMapBoundsOnMoveend = async (
   e: L.LeafletEvent,
-  setBounds: (bounds: Bounds) => void,
+  setBounds: (bounds: Bounds) => void
 ) => {
   try {
-    console.log(e.target)
     const ne = e.target.getBounds().getNorthEast();
     const sw = e.target.getBounds().getSouthWest();
     bounds.push({ ne, sw });
@@ -25,13 +24,14 @@ export const getMapBoundsOnMoveend = async (
     await new Promise(() => {
       setTimeout(() => {
         if (bounds.length > 0) {
-          setBounds(bounds[bounds.length - 1])
+          setBounds(bounds[bounds.length - 1]);
           bounds = [];
         }
-      }, 5000)
-    })
-
-  } catch (error) { console.error(error) }
+      }, 5000);
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 let centers = [];
@@ -46,10 +46,12 @@ export const getMapCenterOnMoveend = async (
     await new Promise(() =>
       setTimeout(() => {
         if (centers.length > 0) {
-          setCoords(centers[centers.length - 1])
+          setCoords(centers[centers.length - 1]);
           centers = [];
         }
       }, 5000)
     );
-  } catch (error) { console.error(error) }
+  } catch (error) {
+    console.error(error);
+  }
 };

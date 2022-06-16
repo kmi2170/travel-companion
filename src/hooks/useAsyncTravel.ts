@@ -11,7 +11,7 @@ import { BoundsAPI } from '../api/type_settings';
 export const useAsyncTravel = () => {
   const { setTravelIsLoading, setTravelSites, setTravelFilteredSites } =
     useTravelDispatchContext();
-  const { type, rating } = useTravelStateContext();
+  const { isLoading, type, rating } = useTravelStateContext();
   const { bounds } = useMapStateContext();
 
   const NE_Lat = bounds?.ne?.lat;
@@ -46,4 +46,6 @@ export const useAsyncTravel = () => {
       fetchTravelSites({ type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }, rating);
     }
   }, [bounds, type]);
+
+  return { isLoading };
 };
