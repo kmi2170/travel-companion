@@ -12,7 +12,7 @@ export default async function news(req: NextApiRequest, res: NextApiResponse) {
       NE_Lng,
       SW_Lat,
       SW_Lng,
-    } as BoundsAPI);
+    });
 
     res.status(200).json(data);
   } catch (error) {

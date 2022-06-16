@@ -11,9 +11,16 @@ import Navbar from '../components/Navbar';
 import ListSites from '../components/ListSites';
 import Footer from '../components/Footer';
 import { useCustomeCookies } from '../hooks/useCustomCookies';
-import { useTravelStateContext, useTravelDispatchContext } from '../contexts/travel/hooks';
-import { useMapStateContext, useMapDispatchContext } from '../contexts/map/hooks';
+import {
+  useTravelStateContext,
+  useTravelDispatchContext,
+} from '../contexts/travel/hooks';
+import {
+  useMapStateContext,
+  useMapDispatchContext,
+} from '../contexts/map/hooks';
 import { useCustomMap } from '../hooks/useCustomMap';
+import { useAsyncWeather } from '../hooks/useAsyncWeather';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -47,64 +54,70 @@ const Home = () => {
     setTravelRating,
     setTravelFilteredSites,
     fetchTravelSites,
-    fetchTravelWeather
+    fetchTravelWeather,
   } = useTravelDispatchContext();
   const { coords, bounds } = useMapStateContext();
   const { setMapInitCoords, setMapSelectedPopup } = useMapDispatchContext();
 
-  const { cookies, setLocationCookie } = useCustomeCookies();
+  const { cookies } = useCustomeCookies(coords);
 
   const Map = useCustomMap();
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     if (cookies.travel_location) {
-      const [lat, lng] = cookies.travel_location
+      const [lat, lng] = cookies.travel_location;
       if (!isNaN(lat) && !isNaN(lng)) {
         setMapInitCoords({ lat, lng });
-        return
+        return;
       }
     }
     ipLookup().then(({ lat, lng }) => {
-      if (!isNaN(lat) && !isNaN(lng)) setMapInitCoords({ lat: +lat, lng: +lng })
+      if (!isNaN(lat) && !isNaN(lng))
+        setMapInitCoords({ lat: +lat, lng: +lng });
     });
   }, []);
 
-  useEffect(() => {
-    if (coords.lat && coords.lng) {
-      setLocationCookie([coords.lat, coords.lng])
-    }
-  }, [coords]);
+  // useEffect(() => {
+  //   if (coords.lat && coords.lng) {
+  //     setLocationCookie([coords.lat, coords.lng])
+  //   }
+  // }, [coords]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
-  const NE_Lat = bounds?.ne?.lat
-  const NE_Lng = bounds?.ne?.lng
-  const SW_Lat = bounds?.sw?.lat
-  const SW_Lng = bounds?.sw?.lng
+  const NE_Lat = bounds?.ne?.lat;
+  const NE_Lng = bounds?.ne?.lng;
+  const SW_Lat = bounds?.sw?.lat;
+  const SW_Lng = bounds?.sw?.lng;
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     if (NE_Lat && NE_Lng && SW_Lat && SW_Lng) {
-      fetchTravelSites({ type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }, rating)
+      fetchTravelSites({ type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }, rating);
     }
   }, [bounds, type]);
 
-  useEffect(() => {
-    const diff_Lat = Math.abs(+NE_Lat - +SW_Lat);
-    const diff_Lng = Math.abs(+NE_Lng - +SW_Lng);
-    if (NE_Lat && NE_Lng && SW_Lat && SW_Lng && diff_Lat < 25.0 && diff_Lng < 25.0) {
-      fetchTravelWeather({ NE_Lat, NE_Lng, SW_Lat, SW_Lng })
-    }
-  }, [bounds]);
+  // useEffect(() => {
+  //   const diff_Lat = Math.abs(+NE_Lat - +SW_Lat);
+  //   const diff_Lng = Math.abs(+NE_Lng - +SW_Lng);
+  //   if (NE_Lat && NE_Lng && SW_Lat && SW_Lng && diff_Lat < 25.0 && diff_Lng < 25.0) {
+  //     fetchTravelWeather({ NE_Lat, NE_Lng, SW_Lat, SW_Lng })
+  //   }
+  // }, [bounds]);
+  useAsyncWeather(bounds);
 
   useEffect(() => {
     const filteredData = list_sites?.filter(
       ({ rating: value }) => value >= rating
-    ) as []
+    ) as [];
     setTravelFilteredSites(filteredData);
   }, [rating]);
 
   useEffect(() => {
-    setTravelRating(0)
+    setTravelRating(0);
     setMapSelectedPopup({ selected: null });
   }, [type]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   return (
     <div className={classes.root}>

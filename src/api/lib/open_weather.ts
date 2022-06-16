@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { BoundsAPI } from '../type_settings';
 
 const api_key = process.env.NEXT_PUBLIC_OPEN_WEATHER_KEY;
 const url = 'https://api.openweathermap.org/data/2.5/box/city';
@@ -10,7 +9,7 @@ export const fetchCurrentWeatherByBounds = async ({
   NE_Lng,
   SW_Lat,
   SW_Lng,
-}: Omit<BoundsAPI, 'type'>) => {
+}) => {
   try {
     const { data } = await axios.get(url, {
       params: {

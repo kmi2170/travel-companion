@@ -23,8 +23,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 const FloatingButton = () => {
   const classes = useStyles();
 
-  console.log('button');
-
   const handleClick = () => {
     window.scrollTo(0, 0);
   };

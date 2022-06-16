@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import ReactDOMServer from 'react-dom/server';
 
 import L from 'leaflet';
@@ -14,7 +14,7 @@ import {
 } from '../../utils/map'
 import PopupContent from './PopupContent';
 import PopupWeather from './PopupWeather';
-import { useTravelStateContext, useTravelDispatchContext } from '../../contexts/travel/hooks';
+import { useTravelStateContext } from '../../contexts/travel/hooks';
 import { useMapStateContext, useMapDispatchContext } from '../../contexts/map/hooks';
 import styles from './Map.module.css';
 
@@ -22,7 +22,7 @@ const attribution =
   '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
 const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-// const initCenter: LatLng = { lat: 46.94618436001851, lng: -122.6065834708836 }; //Yelm
+// const initCenter: LatLng = { lat: 46.94618436001851, lng: -122.6065834708836 }; //Yelm,WA
 const initCenter: LatLng = { lat: 40.69729900863675, lng: -73.97918701171876 }; // New York
 const initZoom = 12;
 const zoomWithMarkerText = 15;
@@ -87,7 +87,10 @@ const Map = () => {
 
   const mapRef = useRef(null);
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
+    if (!init_coords.lat && !init_coords.lng) return
+
     let map = L.map('mymap', {
       center:
         init_coords.lat && init_coords.lng
@@ -122,13 +125,12 @@ const Map = () => {
   }, []);
 
   useEffect(() => {
-    mapRef.current.eachLayer(function(layer) {
+    mapRef?.current?.eachLayer(function(layer) {
       if (layer.options.pane === 'markerPane') {
         layer.removeFrom(mapRef.current);
         console.log('removeMarker');
       }
     });
-
 
     filtered_list_sites?.forEach(
       ({ latitude, longitude, name, photo, rating, num_reviews }, i) => {
@@ -196,7 +198,8 @@ const Map = () => {
         }
       );
     }
-  }, [rating, filtered_list_sites]);
+  }, [rating, filtered_list_sites, list_weather]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   return <div id="mymap" style={{ height: '85vh' }} />;
 };

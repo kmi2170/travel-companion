@@ -3,7 +3,6 @@ import axios from 'axios';
 import { data_restaurants } from '../../assets/data_test/data_restaurants_yelm';
 // import { data_restaurants } from '../../assets/data_test/data_restaurants_yelm_around';
 import { data_attractions } from '../../assets/data_test/data_attractions_yelm_wide';
-import { BoundsAPI } from '../type_settings';
 
 const headers = {
   'x-rapidapi-key': process.env.NEXT_PUBLIC_X_RAPID_API_KEY,
@@ -20,7 +19,7 @@ export const fetchLocationsByBounds = async ({
   NE_Lng,
   SW_Lat,
   SW_Lng,
-}: BoundsAPI) => {
+}) => {
   try {
     if (test) {
       if (type === 'restaurants') return data_restaurants;

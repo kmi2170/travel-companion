@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
+import { Coords } from '../api/type_settings';
 
 const cookiesOptions = {
   path: '/',
@@ -6,11 +8,19 @@ const cookiesOptions = {
   sameSite: true,
 };
 
-export const useCustomeCookies = () => {
+export const useCustomeCookies = (coords: Coords) => {
   const [cookies, setCookie] = useCookies(['travel_location']);
 
-  const setLocationCookie = (lat_lng) =>
-    setCookie('travel_location', lat_lng, cookiesOptions);
+  const setLocationCookie = ({ lat, lng }: Coords) => {
+    if (lat && lng) {
+      setCookie('travel_location', [lat, lng], cookiesOptions);
+      console.log('setcookie')
+    }
+  }
 
-  return { cookies, setLocationCookie };
+  useEffect(() => {
+    setLocationCookie(coords)
+  }, [coords]);
+
+  return { cookies };
 };
