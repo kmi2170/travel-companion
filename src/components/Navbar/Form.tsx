@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -10,6 +11,7 @@ import {
   useTravelStateContext,
   useTravelDispatchContext,
 } from '../../contexts/travel/hooks';
+import { useMapDispatchContext } from '../../contexts/map/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   formContainer: {
@@ -38,8 +40,24 @@ const Form = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { type, rating } = useTravelStateContext();
-  const { setTravelType, setTravelRating } = useTravelDispatchContext();
+  const { list_sites, type, rating } = useTravelStateContext();
+  const { setTravelType, setTravelRating, setTravelFilteredSites } =
+    useTravelDispatchContext();
+  const { setMapSelectedPopup } = useMapDispatchContext();
+
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    const filteredData = list_sites?.filter(
+      ({ rating: value }) => value >= rating
+    ) as [];
+    setTravelFilteredSites(filteredData);
+  }, [rating]);
+
+  useEffect(() => {
+    setTravelRating(0);
+    setMapSelectedPopup({ selected: null });
+  }, [type]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const handeleSetType = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTravelType(e.target.value);

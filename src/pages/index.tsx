@@ -50,15 +50,9 @@ const Home = () => {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
 
-  const { list_sites, type, rating, isLoading } = useTravelStateContext();
-  const {
-    setTravelRating,
-    setTravelFilteredSites,
-    // fetchTravelSites,
-    // fetchTravelWeather,
-  } = useTravelDispatchContext();
+  const { isLoading } = useTravelStateContext();
   const { coords, bounds } = useMapStateContext();
-  const { setMapInitCoords, setMapSelectedPopup } = useMapDispatchContext();
+  const { setMapInitCoords } = useMapDispatchContext();
 
   const { cookies } = useCustomeCookies(coords);
 
@@ -83,20 +77,6 @@ const Home = () => {
   useAsyncTravel();
 
   useAsyncWeather();
-
-  /* eslint-disable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    const filteredData = list_sites?.filter(
-      ({ rating: value }) => value >= rating
-    ) as [];
-    setTravelFilteredSites(filteredData);
-  }, [rating]);
-
-  useEffect(() => {
-    setTravelRating(0);
-    setMapSelectedPopup({ selected: null });
-  }, [type]);
-  /* eslint-enable react-hooks/exhaustive-deps */
 
   return (
     <div className={classes.root}>
