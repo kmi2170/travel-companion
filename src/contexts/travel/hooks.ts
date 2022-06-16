@@ -1,14 +1,8 @@
 import { useContext, useReducer } from 'react';
-import axios from 'axios';
-import {
-  StateContext,
-  DispatchContext,
-  DispatchContextType,
-} from './index';
+import { StateContext, DispatchContext, DispatchContextType } from './index';
 import { initialState, State } from './state';
 import { reducer } from './reducer';
 import { actionTypes, ActionType } from './actions';
-import { BoundsAPI } from '../../api/type_settings';
 
 export const useTravelStateContext = () => {
   return useContext<State>(StateContext);
@@ -44,41 +38,6 @@ export const useTravelContext = () => {
     return dispatch({ type: actionTypes.SET_RATING, payload });
   };
 
-  const fetchTravelSites = (
-    { type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }: BoundsAPI, rating: Payload<'SET_RATING'>
-  ) => {
-    try {
-      setTravelIsLoading(true);
-      (async () => {
-        const params = { type, NE_Lat, NE_Lng, SW_Lat, SW_Lng };
-        const { data } = await axios('/api/locations', { params });
-        const filteredData = data?.filter(({ name }) => Boolean(name))
-          .filter(({ rating: value }) => value >= rating);
-        setTravelSites(data);
-        setTravelFilteredSites(filteredData);
-      })();
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setTravelIsLoading(false);
-    }
-  }
-
-  const fetchTravelWeather = async ({ NE_Lat, NE_Lng, SW_Lat, SW_Lng }: Omit<BoundsAPI, 'type'>) => {
-    try {
-      setTravelIsLoading(true);
-      (async () => {
-        const params = { NE_Lat, NE_Lng, SW_Lat, SW_Lng };
-        const { data } = await axios('/api/weather', { params });
-        setTravelWeather(data['list'])
-      })();
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setTravelIsLoading(false);
-    }
-  }
-
   return {
     state,
     setTravelIsLoading,
@@ -87,7 +46,5 @@ export const useTravelContext = () => {
     setTravelWeather,
     setTravelType,
     setTravelRating,
-    fetchTravelSites,
-    fetchTravelWeather
   };
 };

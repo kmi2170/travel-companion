@@ -21,6 +21,7 @@ import {
 } from '../contexts/map/hooks';
 import { useCustomMap } from '../hooks/useCustomMap';
 import { useAsyncWeather } from '../hooks/useAsyncWeather';
+import { useAsyncTravel } from '../hooks/useAsyncTravel';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -53,8 +54,8 @@ const Home = () => {
   const {
     setTravelRating,
     setTravelFilteredSites,
-    fetchTravelSites,
-    fetchTravelWeather,
+    // fetchTravelSites,
+    // fetchTravelWeather,
   } = useTravelDispatchContext();
   const { coords, bounds } = useMapStateContext();
   const { setMapInitCoords, setMapSelectedPopup } = useMapDispatchContext();
@@ -77,35 +78,13 @@ const Home = () => {
         setMapInitCoords({ lat: +lat, lng: +lng });
     });
   }, []);
-
-  // useEffect(() => {
-  //   if (coords.lat && coords.lng) {
-  //     setLocationCookie([coords.lat, coords.lng])
-  //   }
-  // }, [coords]);
   /* eslint-enable react-hooks/exhaustive-deps */
 
-  const NE_Lat = bounds?.ne?.lat;
-  const NE_Lng = bounds?.ne?.lng;
-  const SW_Lat = bounds?.sw?.lat;
-  const SW_Lng = bounds?.sw?.lng;
+  useAsyncTravel();
+
+  useAsyncWeather();
 
   /* eslint-disable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    if (NE_Lat && NE_Lng && SW_Lat && SW_Lng) {
-      fetchTravelSites({ type, NE_Lat, NE_Lng, SW_Lat, SW_Lng }, rating);
-    }
-  }, [bounds, type]);
-
-  // useEffect(() => {
-  //   const diff_Lat = Math.abs(+NE_Lat - +SW_Lat);
-  //   const diff_Lng = Math.abs(+NE_Lng - +SW_Lng);
-  //   if (NE_Lat && NE_Lng && SW_Lat && SW_Lng && diff_Lat < 25.0 && diff_Lng < 25.0) {
-  //     fetchTravelWeather({ NE_Lat, NE_Lng, SW_Lat, SW_Lng })
-  //   }
-  // }, [bounds]);
-  useAsyncWeather(bounds);
-
   useEffect(() => {
     const filteredData = list_sites?.filter(
       ({ rating: value }) => value >= rating

@@ -1,10 +1,13 @@
-import axios from 'axios';
-import { useTravelDispatchContext } from '../contexts/travel/hooks';
-import { Bounds, BoundsAPI } from '../api/type_settings';
 import { useCallback, useEffect } from 'react';
+import axios from 'axios';
 
-export const useAsyncWeather = (bounds: Bounds) => {
+import { useTravelDispatchContext } from '../contexts/travel/hooks';
+import { useMapStateContext } from '../contexts/map/hooks';
+import { BoundsAPI } from '../api/type_settings';
+
+export const useAsyncWeather = () => {
   const { setTravelIsLoading, setTravelWeather } = useTravelDispatchContext();
+  const { bounds } = useMapStateContext();
 
   const NE_Lat = bounds?.ne?.lat;
   const NE_Lng = bounds?.ne?.lng;
