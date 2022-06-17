@@ -9,7 +9,7 @@ import Footer from '../components/Footer';
 import { useCustomMap } from '../hooks/useCustomMap';
 import { useAsyncWeather } from '../hooks/useAsyncWeather';
 import { useAsyncTravel } from '../hooks/useAsyncTravel';
-import { useSetMapInitCoords } from '../hooks/useSetMapInitCoords';
+import { useMapCookie } from '../hooks/useMapCookie';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -29,13 +29,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Home = () => {
   const classes = useStyles();
 
-  const Map = useCustomMap();
-
-  useSetMapInitCoords();
-
+  useMapCookie();
   const { isLoading } = useAsyncTravel();
-
   useAsyncWeather();
+  const Map = useCustomMap();
 
   return (
     <div className={classes.root}>
