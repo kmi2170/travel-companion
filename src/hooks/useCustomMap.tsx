@@ -4,7 +4,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 export const useCustomMap = () => {
   return useMemo(() => {
-    dynamic(() => import('../components/Map'), {
+    return dynamic(() => import('../components/Map'), {
       loading: () => (
         <>
           <CircularProgress />
