@@ -11,7 +11,7 @@ const headers = {
 const url = (type: string) =>
   `https://travel-advisor.p.rapidapi.com/${type}/list-in-boundary`;
 
-const test = true;
+const test = false;
 
 export const fetchLocationsByBounds = async ({
   type,
