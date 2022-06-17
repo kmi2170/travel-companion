@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { data_restaurants } from '../../assets/data_test/data_restaurants_yelm';
-// import { data_restaurants } from '../../assets/data_test/data_restaurants_yelm_around';
-import { data_attractions } from '../../assets/data_test/data_attractions_yelm_wide';
+import { data_restaurants } from '../../assets/data_test/data_restaurants';
+// import { data_restaurants } from '../../assets/data_test/data_restaurants_around';
+import { data_attractions } from '../../assets/data_test/data_attractions_wide';
 
 const headers = {
   'x-rapidapi-key': process.env.NEXT_PUBLIC_X_RAPID_API_KEY,
@@ -32,7 +32,9 @@ export const fetchLocationsByBounds = async ({
         bl_longitude: SW_Lng,
         tr_longitude: NE_Lng,
       };
-      const { data: { data } } = await axios.get(url(type), {
+      const {
+        data: { data },
+      } = await axios.get(url(type), {
         params,
         headers,
       });

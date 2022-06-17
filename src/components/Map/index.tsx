@@ -11,18 +11,20 @@ import {
   getMapBoundsInit,
   getMapBoundsOnMoveend,
   getMapCenterOnMoveend,
-} from '../../utils/map'
+} from '../../utils/map';
 import PopupContent from './PopupContent';
 import PopupWeather from './PopupWeather';
 import { useTravelStateContext } from '../../contexts/travel/hooks';
-import { useMapStateContext, useMapDispatchContext } from '../../contexts/map/hooks';
+import {
+  useMapStateContext,
+  useMapDispatchContext,
+} from '../../contexts/map/hooks';
 import styles from './Map.module.css';
 
 const attribution =
   '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
 const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-// const initCenter: LatLng = { lat: 46.94618436001851, lng: -122.6065834708836 }; //Yelm,WA
 const initCenter: LatLng = { lat: 40.69729900863675, lng: -73.97918701171876 }; // New York
 const initZoom = 12;
 const zoomWithMarkerText = 15;
@@ -74,28 +76,24 @@ const contentWeather = (description: string, temp: number) =>
     <PopupWeather description={description} temp={temp} />
   )}</div>`;
 
-
 const Map = () => {
-  const { filtered_list_sites, rating, list_weather } = useTravelStateContext()
-  const { init_coords } = useMapStateContext()
-  const { setMapBounds, setMapCoords, setMapSelectedPopup } = useMapDispatchContext()
+  const { filtered_list_sites, rating, list_weather } = useTravelStateContext();
+  const { init_coords } = useMapStateContext();
+  const { setMapBounds, setMapCoords, setMapSelectedPopup } =
+    useMapDispatchContext();
 
   const [isMarkerText, setIsMarkerText] = useState<Boolean>(
     initZoom > zoomWithMarkerText ? true : false
   );
 
-
   const mapRef = useRef(null);
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    if (!init_coords.lat && !init_coords.lng) return
+    if (!init_coords.lat && !init_coords.lng) return;
 
     let map = L.map('mymap', {
-      center:
-        init_coords.lat && init_coords.lng
-          ? init_coords
-          : initCenter,
+      center: init_coords.lat && init_coords.lng ? init_coords : initCenter,
       zoom: initZoom,
       scrollWheelZoom: false,
       layers: [L.tileLayer(url, { attribution })],
@@ -125,7 +123,7 @@ const Map = () => {
   }, []);
 
   useEffect(() => {
-    mapRef?.current?.eachLayer(function(layer) {
+    mapRef?.current?.eachLayer(function (layer) {
       if (layer.options.pane === 'markerPane') {
         layer.removeFrom(mapRef.current);
         console.log('removeMarker');
@@ -148,7 +146,7 @@ const Map = () => {
           document.addEventListener('click', (e: MouseEvent) => {
             if ((e.target as HTMLElement).id === `pContent${i}`) {
               console.log('click', i);
-              setMapSelectedPopup({ selected: i })
+              setMapSelectedPopup({ selected: i });
             }
           });
 
@@ -172,31 +170,29 @@ const Map = () => {
     );
 
     if (list_weather?.length) {
-      list_weather.map(
-        ({ coord: { Lat, Lon }, weather, main: { temp } }) => {
-          const popupWeather = L.popup({
-            maxWidth: 150,
-            // autoPan: true,
-            // keepInView: true,
-            // closeButton: false,
-            // closeOnClick: false,
+      list_weather.map(({ coord: { Lat, Lon }, weather, main: { temp } }) => {
+        const popupWeather = L.popup({
+          maxWidth: 150,
+          // autoPan: true,
+          // keepInView: true,
+          // closeButton: false,
+          // closeOnClick: false,
+        })
+          .setLatLng([Lat, Lon])
+          .setContent(contentWeather(weather[0]['description'], temp));
+
+        const weatherIcon = new L.Icon({
+          iconUrl: ` http://openweathermap.org/img/wn/${weather[0]['icon']}@2x.png`,
+          iconSize: [50, 50],
+        });
+        const weatherMarker = L.marker([Lat, Lon], { icon: weatherIcon })
+          .on('mouseover', (e) => {
+            e.target.openPopup();
           })
-            .setLatLng([Lat, Lon])
-            .setContent(contentWeather(weather[0]['description'], temp));
+          .bindPopup(popupWeather);
 
-          const weatherIcon = new L.Icon({
-            iconUrl: ` http://openweathermap.org/img/wn/${weather[0]['icon']}@2x.png`,
-            iconSize: [50, 50],
-          });
-          const weatherMarker = L.marker([Lat, Lon], { icon: weatherIcon })
-            .on('mouseover', (e) => {
-              e.target.openPopup();
-            })
-            .bindPopup(popupWeather);
-
-          weatherMarker.addTo(mapRef.current);
-        }
-      );
+        weatherMarker.addTo(mapRef.current);
+      });
     }
   }, [rating, filtered_list_sites, list_weather]);
   /* eslint-enable react-hooks/exhaustive-deps */

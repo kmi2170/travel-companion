@@ -27,7 +27,7 @@ export const useAsyncTravel = () => {
           const params = { type, NE_Lat, NE_Lng, SW_Lat, SW_Lng };
           const { data } = await axios('/api/locations', { params });
           const filteredData = data
-            ?.filter(({ name }) => Boolean(name))
+            .filter(({ name }) => Boolean(name))
             .filter(({ rating: value }) => value >= rating);
           setTravelSites(data);
           setTravelFilteredSites(filteredData);
